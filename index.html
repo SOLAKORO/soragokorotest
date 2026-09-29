@@ -243,11 +243,176 @@
     .result-item { background: #f9f9f9; padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 6px solid; word-break: break-word; }
     .result-item.correct { border-color: var(--correct-color); }
     .result-item.wrong { border-color: var(--wrong-color); }
+    /* --- マイページ：ガチャ／コレクション導線・おかし交換状況 --- */
+    .mypage-action-row { display:flex; gap:10px; justify-content:center; margin-top:10px; }
+    .mypage-action-btn { flex:1; max-width:150px; padding:10px; font-size:1rem; border-radius:14px; border:none; box-shadow:0 3px 0 rgba(0,0,0,0.15); font-family:inherit; font-weight:900; cursor:pointer; color:white; }
+    .gacha-action-btn { background:#e91e63; box-shadow:0 3px 0 #ad1457; }
+    .collection-action-btn { background:#00bcd4; box-shadow:0 3px 0 #0097a7; }
+
+    .snack-status-box { background:#fff8e1; border:2px solid #ffe082; border-radius:12px; padding:10px 12px; margin-bottom:10px; flex-shrink:0; }
+    .snack-status-header { font-weight:900; color:#e65100; cursor:pointer; display:flex; justify-content:space-between; align-items:center; font-size:0.95rem; }
+    .snack-status-list { margin-top:8px; max-height:140px; overflow-y:auto; }
+    .snack-status-list.hidden { display:none; }
+    .snack-status-item { display:flex; justify-content:space-between; gap:8px; font-size:0.85rem; padding:5px 0; border-bottom:1px dashed #ffe0b2; }
+    .snack-status-item .ss-status { font-weight:900; white-space:nowrap; }
+    .snack-status-item .ss-status.pending { color:#e65100; }
+    .snack-status-item .ss-status.done { color:#4caf50; }
+
+    /* --- ガチャ画面 --- */
+    #gacha-stage { position: relative; min-height: 200px; display:flex; flex-direction:column; align-items:center; justify-content:center; margin: 10px 0 20px; border-radius: 20px; background: #fdf6ff; border: 3px solid #f3e5f5; overflow:hidden; transition: background 0.4s; text-align:center; padding: 10px; box-sizing:border-box; }
+    .gacha-machine { font-size: 4.5rem; }
+    .gacha-machine.spinning { animation: gachaSpin 1.1s linear infinite; display:inline-block; }
+    @keyframes gachaSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    .gacha-ball { font-size: 2.2rem; margin-top: 4px; animation: gachaBounce 0.55s ease-in-out infinite alternate; }
+    @keyframes gachaBounce { from { transform: translateY(0); } to { transform: translateY(-14px); } }
+    .gacha-caption { margin-top: 10px; font-weight: 900; font-size: 1.05rem; color: #666; min-height: 1.4em; }
+
+    #gacha-stage.gacha-reach { background: #fff3e0; animation: gachaShake 0.15s infinite; }
+    @keyframes gachaShake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+
+    #gacha-stage.gacha-flash-a { animation: gachaAuraRed 0.5s ease-in-out infinite alternate; }
+    @keyframes gachaAuraRed { from { box-shadow: 0 0 20px 4px rgba(244,67,54,0.45) inset; background:#fff0f0; } to { box-shadow: 0 0 55px 16px rgba(244,67,54,0.85) inset; background:#ffe0e0; } }
+
+    #gacha-stage.gacha-flash-s { background: linear-gradient(270deg, #ff5252, #ffeb3b, #4caf50, #2196f3, #9c27b0, #ff5252); background-size: 600% 600%; animation: gachaRainbowBg 1.4s linear infinite; }
+    @keyframes gachaRainbowBg { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
+
+    .gacha-result-badge { font-size: 3rem; font-weight: 900; padding: 8px 26px; border-radius: 20px; display:inline-block; }
+    .grade-C .gacha-result-badge { background:#eee; color:#777; }
+    .grade-B .gacha-result-badge { background:#e1f5fe; color:#0288d1; }
+    .grade-A .gacha-result-badge { background:#ffebee; color:#d32f2f; box-shadow: 0 0 22px rgba(244,67,54,0.6); animation: gachaAuraRed 0.7s ease-in-out infinite alternate; }
+    .grade-S .gacha-result-badge { background: linear-gradient(270deg, #ff5252, #ffeb3b, #4caf50, #2196f3, #9c27b0, #ff5252); background-size: 600% 600%; animation: gachaRainbowBg 1.8s linear infinite; color: white; text-shadow: 0 0 8px rgba(0,0,0,0.4); }
+
+    .gacha-result-card { text-align:center; background:#fff; border-radius:16px; padding: 18px; margin: 4px 0 14px; border: 3px solid #eee; }
+    .gacha-result-card.grade-A { border-color: #ef5350; box-shadow: 0 0 18px rgba(244,67,54,0.35); }
+    .gacha-result-card.grade-S { border: 3px solid transparent; background-image: linear-gradient(#fff,#fff), linear-gradient(270deg, #ff5252, #ffeb3b, #4caf50, #2196f3, #9c27b0, #ff5252); background-origin: border-box; background-clip: padding-box, border-box; background-size: 100% 100%, 600% 600%; animation: gachaRainbowBg 1.8s linear infinite; box-shadow: 0 0 22px rgba(255,0,150,0.3); }
+    .gacha-result-category { font-size: 0.9rem; color: #999; margin-bottom: 4px; }
+    .gacha-result-name { font-size: 1.4rem; font-weight: 900; color: #333; }
+
+    /* --- ガチャ 全画面演出オーバーレイ --- */
+    .gacha-fx-overlay { position:absolute; inset:0; z-index:500; overflow:hidden; display:flex; align-items:center; justify-content:center; pointer-events:none; }
+    .gacha-fx-overlay.hidden { display:none; }
+    .gacha-fx-flash { position:absolute; inset:0; opacity:0; }
+    .fx-flash-C { background:#fff; animation: fxFlashSoft 0.7s ease-out forwards; }
+    .fx-flash-B { background: radial-gradient(circle, #b3e5fc, #0288d1); animation: fxFlashSoft 0.8s ease-out forwards; }
+    .fx-flash-A { background: radial-gradient(circle, #ffccbc, #d32f2f); animation: fxFlashStrong 1s ease-out forwards; }
+    .fx-flash-S { background: conic-gradient(from 0deg, #ff5252, #ffeb3b, #4caf50, #2196f3, #9c27b0, #ff5252); background-size:200% 200%; animation: fxFlashStrong 1.6s ease-out forwards, gachaRainbowBg 1s linear infinite; }
+    @keyframes fxFlashSoft { 0%{opacity:0;} 12%{opacity:0.85;} 100%{opacity:0;} }
+    @keyframes fxFlashStrong { 0%{opacity:0;} 8%{opacity:1;} 45%{opacity:0.55;} 100%{opacity:0;} }
+
+    .gacha-fx-badge { position:relative; font-size: 2.6rem; font-weight: 900; opacity:0; padding: 10px 30px; border-radius: 24px; text-align:center; white-space:nowrap; }
+    .gacha-fx-badge.show { animation: fxBadgeIn 0.55s cubic-bezier(.34,1.56,.64,1) forwards; }
+    @keyframes fxBadgeIn { 0%{ opacity:0; transform:scale(0.25) rotate(-18deg);} 60%{ opacity:1; transform:scale(1.15) rotate(3deg);} 80%{ transform:scale(0.94) rotate(-1deg);} 100%{ opacity:1; transform:scale(1) rotate(0deg);} }
+    .gacha-fx-badge.badge-C { color:#777; background:rgba(255,255,255,0.9); box-shadow:0 4px 14px rgba(0,0,0,0.15); }
+    .gacha-fx-badge.badge-B { color:#0277bd; background:rgba(255,255,255,0.92); box-shadow:0 0 26px rgba(2,136,209,0.5); }
+    .gacha-fx-badge.badge-A { color:#fff; background: linear-gradient(135deg,#ff7043,#d32f2f); box-shadow:0 0 40px rgba(211,47,47,0.75); animation: fxBadgeIn 0.55s cubic-bezier(.34,1.56,.64,1) forwards, gachaAuraRed 0.6s ease-in-out infinite alternate; }
+    .gacha-fx-badge.badge-S { color:#fff; background: linear-gradient(270deg, #ff5252, #ffeb3b, #4caf50, #2196f3, #9c27b0, #ff5252); background-size: 600% 600%; box-shadow:0 0 55px rgba(255,255,255,0.6); animation: fxBadgeIn 0.55s cubic-bezier(.34,1.56,.64,1) forwards, gachaRainbowBg 1.1s linear infinite; }
+
+    .gacha-fx-particle { position:absolute; left:50%; top:50%; will-change:transform,opacity; animation: fxParticleBurst var(--dur) ease-out var(--delay) forwards; }
+    @keyframes fxParticleBurst {
+        0% { transform: translate(-50%,-50%) scale(0.3) rotate(0deg); opacity:0; }
+        15% { opacity:1; }
+        100% { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(1.05) rotate(360deg); opacity:0; }
+    }
+    .gacha-fx-confetti { position:absolute; top:-24px; width:9px; height:15px; opacity:0.95; animation: fxConfettiFall var(--dur) linear var(--delay) forwards; }
+    @keyframes fxConfettiFall {
+        0% { transform: translateY(0) rotate(0deg); opacity:1; }
+        100% { transform: translateY(720px) rotate(720deg); opacity:0.9; }
+    }
+
+    #app-container.gacha-shake-hard { animation: gachaShakeHard 0.45s; }
+    @keyframes gachaShakeHard { 0%,100%{transform:translateX(0);} 15%{transform:translate(-6px,-3px);} 30%{transform:translate(6px,3px);} 45%{transform:translate(-5px,2px);} 60%{transform:translate(5px,-2px);} 75%{transform:translate(-3px,1px);} 90%{transform:translate(3px,-1px);} }
+
+    /* --- ガチャ シアター（最初から全画面）--- */
+    .gacha-fx-overlay.theater { pointer-events:auto; background: radial-gradient(circle at 50% 50%, #7e57c2 0%, #311b92 55%, #12005e 100%); }
+    .gacha-fx-overlay.theater.phase-reach { background: radial-gradient(circle at 50% 50%, #ffb74d 0%, #e65100 55%, #3e0d00 100%); }
+    .gacha-fx-overlay.theater.phase-reach .gt-center { animation: gachaShake 0.15s infinite; }
+    .gacha-fx-overlay.theater.kakutei-C { background: radial-gradient(circle, #fff9c4 0%, #ffb74d 65%, #ef6c00 100%); }
+    .gacha-fx-overlay.theater.kakutei-B { background: radial-gradient(circle, #b3e5fc 0%, #0288d1 65%, #01579b 100%); }
+    .gacha-fx-overlay.theater.kakutei-A { background: radial-gradient(circle, #ffab91 0%, #d32f2f 60%, #4a0000 100%); }
+    .gacha-fx-overlay.theater.kakutei-S { background: linear-gradient(270deg, #ff5252, #ffeb3b, #4caf50, #2196f3, #9c27b0, #ff5252); background-size: 600% 600%; animation: gachaRainbowBg 1.2s linear infinite; }
+    .gt-rays { position:absolute; left:50%; top:50%; width:200vmax; height:200vmax; margin:-100vmax 0 0 -100vmax; background: repeating-conic-gradient(from 0deg, rgba(255,255,255,0.16) 0deg 8deg, transparent 8deg 16deg); animation: gtRaysSpin 10s linear infinite; pointer-events:none; }
+    @keyframes gtRaysSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    .gt-center { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:2; pointer-events:none; }
+    .gt-machine { font-size: 7.5rem; display:inline-block; animation: gachaSpin 1.1s linear infinite; }
+    .gt-orb { font-size: 3rem; animation: gachaBounce 0.55s ease-in-out infinite alternate; }
+    .gt-layer { position:absolute; inset:0; z-index:3; overflow:hidden; pointer-events:none; }
+    .gt-caption { position:absolute; left:0; right:0; bottom:17%; text-align:center; color:#fff; font-size:1.5rem; font-weight:900; text-shadow:0 2px 10px rgba(0,0,0,0.7); z-index:6; pointer-events:none; padding:0 10px; }
+    .gacha-fx-skip { position:absolute; left:50%; bottom:5%; transform:translateX(-50%); z-index:10; pointer-events:auto; padding:10px 26px; border:none; border-radius:24px; background:rgba(255,255,255,0.88); color:#333; font-weight:900; font-family:inherit; font-size:1rem; cursor:pointer; }
+    .gt-badge-wrap { position:absolute; inset:0; z-index:5; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; pointer-events:none; }
+    .gt-hero { font-size:9rem; line-height:1; filter: drop-shadow(0 8px 14px rgba(0,0,0,0.35)); animation: gtHeroPop 0.7s cubic-bezier(.34,1.56,.64,1) both; }
+    .gt-hero.hero-A { font-size:11rem; }
+    .gt-hero.hero-S { font-size:13rem; animation: gtHeroPop 0.7s cubic-bezier(.34,1.56,.64,1) both, gtHeroFloat 1.1s ease-in-out 0.7s infinite alternate; }
+    @keyframes gtHeroPop { 0% { transform: scale(0) rotate(-30deg); opacity:0; } 100% { transform: scale(1) rotate(0deg); opacity:1; } }
+    @keyframes gtHeroFloat { from { transform: translateY(0) scale(1); } to { transform: translateY(-16px) scale(1.05); } }
+
+    .gt-hero { display:flex; align-items:flex-end; justify-content:center; gap:4px; }
+    .gt-hero.hero-S { animation: gtHeroPop 0.7s cubic-bezier(.34,1.56,.64,1) both; }
+    .gt-hero-img { width:auto; filter: drop-shadow(0 8px 12px rgba(0,0,0,0.35)); animation: gtCharJump 0.55s ease-in-out infinite alternate; }
+    @keyframes gtCharJump { from { transform: translateY(0) rotate(-4deg); } to { transform: translateY(-18px) rotate(4deg); } }
+    .gt-peek { position:absolute; bottom:0; transform: translate(-50%, 110%); animation: gtPeek var(--dur) ease-in-out forwards; }
+    @keyframes gtPeek { 0% { transform: translate(-50%,110%) rotate(0deg); } 40% { transform: translate(-50%,5%) rotate(-10deg); } 60% { transform: translate(-50%,5%) rotate(10deg); } 100% { transform: translate(-50%,110%) rotate(0deg); } }
+    .gt-edge { position:absolute; left:0; top:0; animation: gtEdge var(--dur) linear forwards; }
+    @keyframes gtEdge { 0% { transform: translate(var(--sx), var(--sy)) rotate(0deg); } 100% { transform: translate(var(--ex), var(--ey)) rotate(var(--rot)); } }
+    .gt-zoom { position:absolute; left:50%; top:50%; font-size:3rem; will-change:transform,opacity; animation: gtZoom var(--dur) ease-in forwards; }
+    @keyframes gtZoom {
+        0% { transform: translate(-50%,-50%) scale(0.15) rotate(0deg); opacity:0; }
+        15% { opacity:1; }
+        100% { transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(var(--sc)) rotate(var(--rot)); opacity:0; }
+    }
+
+    /* --- コレクション画面 --- */
+    .collection-tabs { display:flex; gap:6px; overflow-x:auto; padding-bottom:8px; margin-bottom:10px; flex-shrink:0; }
+    .collection-tab { flex-shrink:0; padding: 8px 14px; border-radius: 20px; border: 2px solid #ddd; background: #fff; font-weight:900; font-family:inherit; cursor:pointer; color:#666; }
+    .collection-tab.active { background: #00bcd4; color:white; border-color:#0097a7; }
+    .collection-grid { display:grid; grid-template-columns: repeat(2, 1fr); gap: 10px; overflow-y:auto; flex:1; padding-bottom:10px; align-content:start; }
+    .collection-item { background:#fff; border:3px solid #eee; border-radius:14px; padding:14px 8px; text-align:center; cursor:pointer; font-weight:900; color:#555; font-size:0.95rem; }
+    .collection-item.equipped { border-color:#4caf50; background:#f1f8e9; color:#2e7d32; }
+    .collection-item .ci-mark { display:block; font-size:1.5rem; margin-bottom:4px; }
+    .collection-item .ci-count { font-size:0.8rem; color:#999; font-weight:900; }
+    .collection-empty { grid-column: span 2; text-align:center; color:#999; padding: 30px 0; }
+
+    /* --- Sボーナス獲得エフェクト --- */
+    .sbonus-effect { position:absolute; top:18%; left:50%; transform:translateX(-50%); background:#fff59d; color:#e65100; font-weight:900; font-size:1.2rem; padding:12px 22px; border-radius:30px; box-shadow:0 6px 0 #ffca28; z-index:300; white-space:nowrap; animation: sbonusPop 2.2s ease forwards; pointer-events:none; }
+    .sbonus-wrap { position:absolute; inset:0; z-index:300; pointer-events:none; overflow:hidden; }
+    .sbonus-wrap .sbonus-effect { animation: sbonusPop 3.1s ease forwards; }
+    .sbonus-effect.sbonus-info { background:#eceff1; color:#546e7a; box-shadow:0 5px 0 #b0bec5; font-size:1rem; }
+    .sbonus-char { position:absolute; bottom:0; transform: translateY(130%); animation: sbonusJump 2.9s ease-out forwards; }
+    .sbonus-char img { display:block; height:5.2rem; width:auto; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.25)); }
+    @keyframes sbonusJump {
+        0% { transform: translateY(130%); }
+        22% { transform: translateY(var(--rise)) rotate(-6deg); }
+        36% { transform: translateY(calc(var(--rise) + 30px)) rotate(6deg); }
+        50% { transform: translateY(var(--rise)) rotate(-6deg); }
+        64% { transform: translateY(calc(var(--rise) + 30px)) rotate(6deg); }
+        80% { transform: translateY(var(--rise)) rotate(0deg); opacity:1; }
+        100% { transform: translateY(130%); opacity:0; }
+    }
+    @keyframes sbonusPop { 0% { transform:translate(-50%,20px) scale(0.5); opacity:0; } 15% { transform:translate(-50%,0) scale(1.1); opacity:1; } 25% { transform:translate(-50%,0) scale(1); } 80% { opacity:1; } 100% { transform:translate(-50%,-16px) scale(0.9); opacity:0; } }
+
+    @keyframes pop { 0% { transform: scale(0.3); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+    .sub-title { font-size: 1.3rem; font-weight: 900; color: #ff9800; margin-top: 5px; letter-spacing: 2px; }
+    .accuracy-display { font-size: 1.2rem; font-weight: bold; color: #e91e63; }
+    .time-display { font-size: 1.1rem; font-weight: bold; color: #555; }
+    .result-comment { font-size: 1.2rem; font-weight: bold; color: #ff9800; margin-top: 8px; }
+    .settings-error { color: #f44336; background: #ffebee; border: 2px solid #ffcdd2; border-radius: 10px; padding: 10px; text-align: center; font-weight: bold; margin-bottom: 10px; }
+    .btn-action:disabled { opacity: 0.7; cursor: wait; }
+
+    /* --- パスワード変更 --- */
+    .password-link-btn { margin-top: 10px; background: none; border: none; color: #0097a7; font-family: inherit; font-weight: 900; font-size: 0.95rem; text-decoration: underline; cursor: pointer; }
+    .password-box { background: #fff; border: 3px solid #b2ebf2; border-radius: 16px; padding: 18px; max-width: 380px; width: 100%; margin: 0 auto; box-sizing: border-box; }
+    .password-box label { display: block; color: #00bcd4; font-weight: 900; margin-bottom: 4px; }
+    .password-box input[type="password"], .password-box input[type="text"] { width: 100%; padding: 12px; border: 2px solid #b2ebf2; border-radius: 12px; font-size: 1.2rem; font-family: inherit; box-sizing: border-box; margin-bottom: 12px; background: #f1fbfd; }
+    #pw-message { text-align: center; font-weight: bold; padding: 8px; border-radius: 10px; margin-bottom: 6px; }
+    #pw-message.error { color: #f44336; background: #ffebee; }
+    #pw-message.success { color: #2e7d32; background: #e8f5e9; }
+
 </style>
 </head>
 <body>
 
 <div id="app-container">
+    <!-- ★ ガチャ全画面演出オーバーレイ（等級によって派手さが変わる） -->
+    <div id="gacha-fx-overlay" class="gacha-fx-overlay hidden"></div>
     <div id="clock-display"></div>
 
     <!-- ログイン画面 -->
@@ -314,6 +479,19 @@
         <div class="mypage-header">
             <h2 id="mypage-name-display">なまえ</h2>
             <div class="point-badge" id="mypage-points-display">🪙 0 Pt</div>
+            <div class="mypage-action-row">
+                <button class="btn mypage-action-btn gacha-action-btn" onclick="openGacha()">🎰 ガチャ</button>
+                <button class="btn mypage-action-btn collection-action-btn" onclick="openCollection()">🗂️ コレクション</button>
+            </div>
+            <button class="password-link-btn" onclick="openPasswordChange()">🔑 パスワードを かえる</button>
+        </div>
+
+        <div class="snack-status-box hidden" id="snack-status-box">
+            <div class="snack-status-header" onclick="toggleSnackList()">
+                <span>🍬 おかしの こうかんじょうきょう <span id="snack-status-summary"></span></span>
+                <span id="snack-toggle-icon">▼</span>
+            </div>
+            <div class="snack-status-list hidden" id="snack-status-list"></div>
         </div>
         
         <div class="calendar-container" onclick="handleCalendarEmptyClick(event)">
@@ -382,8 +560,9 @@
                 <option value="30">30問</option>
             </select>
         </div>
-        <button class="btn btn-action" onclick="startQuiz()">テストスタート！</button>
-        <button class="btn" style="margin-top: 10px; background:#ccc; color:#333;" onclick="renderTopScreen()">もどる</button>
+        <div id="settings-error" class="settings-error hidden"></div>
+        <button class="btn btn-action" id="start-quiz-btn" onclick="startQuiz()">テストスタート！</button>
+        <button class="btn" style="margin-top: 10px; background:#ccc; color:#333;" onclick="backFromSettings()">もどる</button>
     </div>
 
     <!-- クイズ画面 -->
@@ -420,6 +599,51 @@
             <button id="share-btn" class="btn btn-share" onclick="shareResult()">📷 結果を送信</button>
             <button class="btn btn-action" onclick="resetApp()">トップにもどる</button>
         </div>
+    </div>
+
+    <!-- ガチャ画面 -->
+    <div id="screen-gacha" class="screen">
+        <button class="top-left-btn" onclick="closeGacha()">⬅ もどる</button>
+        <h2 style="text-align:center; color:#e91e63; font-size:1.8rem; margin-top:60px;">🎰 ガチャ</h2>
+        <div style="text-align:center; margin: 6px 0 16px;">
+            <div class="point-badge" id="gacha-points-display">🪙 0 Pt</div>
+        </div>
+
+        <div id="gacha-stage">
+            <div class="gacha-machine">🎰</div>
+        </div>
+
+        <div id="gacha-result-area" class="hidden"></div>
+
+        <button class="btn btn-action" id="gacha-draw-btn" onclick="startGachaDraw()" style="background:#e91e63; border-bottom-color:#ad1457;">10pt で ガチャをまわす！</button>
+        <button class="btn" id="gacha-skip-btn" onclick="skipGachaAnimation()" style="display:none; margin-top:10px; background:#ccc; color:#333;">スキップ ▶</button>
+        <button class="btn btn-action" id="gacha-again-btn" style="display:none;" onclick="resetGachaScreen()">もういちど まわす</button>
+        <button class="btn" id="gacha-back-btn" style="display:none; margin-top:10px; background:#ccc; color:#333;" onclick="closeGacha()">マイページへ もどる</button>
+    </div>
+
+    <!-- パスワード変更画面 -->
+    <div id="screen-password" class="screen">
+        <button class="top-left-btn" onclick="renderMyPage()">⬅ もどる</button>
+        <h2 style="text-align:center; color:#00bcd4; font-size:1.6rem; margin-top:60px;">🔑 パスワードを かえる</h2>
+        <div class="password-box">
+            <label for="pw-current">いまの パスワード</label>
+            <input type="password" id="pw-current" autocomplete="current-password">
+            <label for="pw-new">あたらしい パスワード（4〜20もじ）</label>
+            <input type="password" id="pw-new" autocomplete="new-password">
+            <label for="pw-new2">あたらしい パスワード（もういちど）</label>
+            <input type="password" id="pw-new2" autocomplete="new-password">
+            <label class="checkbox-label" style="margin-top:4px;"><input type="checkbox" id="pw-show" onchange="togglePasswordVisible()"> もじを みせる</label>
+            <div id="pw-message" class="hidden"></div>
+            <button class="btn btn-action" id="pw-submit-btn" onclick="submitPasswordChange()">かえる</button>
+        </div>
+    </div>
+
+    <!-- コレクション画面 -->
+    <div id="screen-collection" class="screen">
+        <button class="top-left-btn" onclick="renderMyPage()">⬅ もどる</button>
+        <h2 style="text-align:center; color:#00bcd4; font-size:1.8rem; margin-top:60px;">🗂️ コレクション</h2>
+        <div class="collection-tabs" id="collection-tabs"></div>
+        <div class="collection-grid" id="collection-grid"></div>
     </div>
 
     <div id="effect-overlay"></div>
@@ -485,13 +709,29 @@ let startTime, timerInterval, elapsedSeconds = 0;
 let audioCtx = null;
 let bgmInterval, bgmGainNode = null, isBgmPlaying = false;
 let selectedSubject = '', currentQuestions = [], currentIndex = 0, userResults = [];
-let currentUser = "", currentUserId = ""; 
+let currentUser = "", currentUserId = "";   // currentUserId は名簿の「番号」（同じログインIDの人がいても区別できる）
+let currentLoginId = "";                     // ログイン画面で入力したID（IDの保存にだけ使う）
+// 端末に保存するきろくのキー（番号ごとに分ける）
+const localKey = (kind, no) => 'soragokoro_' + kind + '_all_no' + (no === undefined ? currentUserId : no);
 let currentAppMode = 'sho'; 
 let currentPoints = 0;
 let isFirstLoginTodayFlag = false;
 let currentCalYear = new Date().getFullYear();
 let currentCalMonth = new Date().getMonth();
 let selectedFilterDate = null; 
+let currentQuizGrade = null;           // まとめテスト送信時の学年Sボーナス判定に使う
+let myPossessions = [];                // マイページ取得時の所持品一覧（コレクション画面で使う）
+let collectionActiveCategory = '';     // コレクション画面でいま選んでいるカテゴリタブ
+// ★ カテゴリは固定リストをやめ、所持品データ（景品マスタ由来）から実際に存在するものだけを動的に生成する
+//   （景品マスタでカテゴリを増やしても表記ゆれがあっても、確実にタブに出るようにするため）
+function getCollectionCategories() {
+    const cats = [];
+    myPossessions.forEach(p => { if (p.category && cats.indexOf(p.category) === -1) cats.push(p.category); });
+    return cats;
+}
+let gachaTimers = [];                  // ガチャ演出のsetTimeoutをまとめて管理（スキップ・画面離脱時にクリア）
+let gachaResultData = null;
+let quizSession = 0; // テストを始める／やめるたびに増やし、古い読み込みや「次の問題へ」の予約を無効にする
 
 document.addEventListener('DOMContentLoaded', () => {
     const savedId = safeStore.get('soragokoro_saved_id_all');
@@ -499,6 +739,11 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('login-id').value = savedId;
         document.getElementById('save-id-check').checked = true;
     }
+    ['login-id', 'login-password'].forEach(id => {
+        document.getElementById(id).addEventListener('keydown', e => {
+            if (e.key === 'Enter' && !e.isComposing) loginApp();
+        });
+    });
 });
 
 function toggleSound() {
@@ -517,6 +762,7 @@ function loginApp() {
     const errorEl = document.getElementById('login-error');
     const btn = document.getElementById('login-btn');
     const saveCheck = document.getElementById('save-id-check').checked;
+    if (btn.disabled) return;
 
     if (!id || !pw) {
         errorEl.textContent = "IDとパスワードをいれてね！";
@@ -528,15 +774,19 @@ function loginApp() {
     btn.disabled = true;
     errorEl.classList.add('hidden');
 
-    callGAS({ action: "login", id: id, password: pw })
+    // 以前のバージョンはログインIDごとに端末へ保存していたので、その分のスタンプも送って引き継ぐ
+    callGAS({ action: "login", id: id, password: pw, localStamps: readStamps(legacyKey('stamps', id)) })
     .then(data => {
         btn.innerHTML = "ログインする♪";
         btn.disabled = false;
         if (data.status === "success") {
             currentUser = data.name;
-            currentUserId = id;
-            currentPoints = data.points || 0; 
+            currentLoginId = id;
+            currentUserId = String(data.memberNo || id);   // ★ これ以降の通信・端末のきろくは番号で行う
+            currentPoints = data.points || 0;
             isFirstLoginTodayFlag = data.isFirstLoginToday;
+            if (!data.idShared) migrateLegacyHistory(id);   // 同じIDの人がいなければ、古いきろくを番号のほうへ移す
+            cacheLoginDates(data.loginDates); // ★ ログイン履歴はスプレッドシートを正として端末に反映
             
             document.getElementById('mypage-points-display').textContent = `🪙 ${currentPoints} Pt`;
 
@@ -560,8 +810,26 @@ function loginApp() {
     });
 }
 
+// ★ ログイン履歴（スタンプ）：スプレッドシートの「ログイン履歴」シートを正とし、端末(localStorage)は表示用のキャッシュとして使う
+const legacyKey = (kind, loginId) => 'soragokoro_' + kind + '_all_' + loginId;   // 以前の保存キー（ログインIDごと）
+function readStamps(key) {
+    try { return JSON.parse(safeStore.get(key)) || []; } catch (e) { return []; }
+}
+function cacheLoginDates(dates) {
+    if (!Array.isArray(dates)) return;
+    const merged = Array.from(new Set(readStamps(localKey('stamps')).concat(dates))).sort();
+    safeStore.set(localKey('stamps'), JSON.stringify(merged));
+}
+// 以前のバージョンでログインIDごとに保存したテストのきろくを、番号ごとの保存先へ1回だけ移す
+function migrateLegacyHistory(loginId) {
+    const oldKey = legacyKey('history', loginId);
+    const old = safeStore.get(oldKey);
+    if (old && !safeStore.get(localKey('history'))) safeStore.set(localKey('history'), old);
+    if (old) safeStore.remove(oldKey);
+}
+
 function logoutApp() {
-    currentUser = ""; currentUserId = ""; currentPoints = 0; selectedFilterDate = null;
+    currentUser = ""; currentUserId = ""; currentLoginId = ""; currentPoints = 0; selectedFilterDate = null;
     document.getElementById('login-password').value = "";
     if (!document.getElementById('save-id-check').checked) document.getElementById('login-id').value = "";
     showScreen('screen-login');
@@ -577,10 +845,10 @@ function selectAppMode(mode) {
         const year = now.getFullYear(); const month = now.getMonth();
         const todayStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
         
-        let stamps = JSON.parse(safeStore.get('soragokoro_stamps_all_' + currentUserId)) || [];
+        let stamps = JSON.parse(safeStore.get(localKey('stamps'))) || [];
         if (!stamps.includes(todayStr)) {
             stamps.push(todayStr);
-            safeStore.set('soragokoro_stamps_all_' + currentUserId, JSON.stringify(stamps));
+            safeStore.set(localKey('stamps'), JSON.stringify(stamps));
         }
         
         renderCalendar('bonus-calendar-grid', stamps, true, year, month);
@@ -622,6 +890,7 @@ function renderTopScreen() {
 
 function renderMyPage() {
     document.getElementById('mypage-name-display').textContent = currentUser + " の ページ";
+    document.getElementById('mypage-points-display').textContent = `🪙 ${currentPoints} Pt`;
     currentCalYear = new Date().getFullYear();
     currentCalMonth = new Date().getMonth();
     selectedFilterDate = null; 
@@ -629,10 +898,50 @@ function renderMyPage() {
     updateMyPageCalendar();
     renderHistoryList();
     showScreen('screen-mypage');
+
+    // ポイント・所持品・おかし交換状況は、サーバー（スプレッドシート）を正として取得しなおす
+    callGAS({ action: "getMyPageData", id: currentUserId })
+        .then(data => { if (data.status === 'success') applyMyPageData(data); })
+        .catch(err => console.error('マイページ取得エラー', err));
+}
+
+// getMyPageData の結果を画面に反映する
+function applyMyPageData(data) {
+    currentPoints = data.points;
+    document.getElementById('mypage-points-display').textContent = `🪙 ${currentPoints} Pt`;
+    myPossessions = data.possessions || [];
+    if (Array.isArray(data.loginDates)) { cacheLoginDates(data.loginDates); updateMyPageCalendar(); }
+
+    const snackBox = document.getElementById('snack-status-box');
+    const snackList = document.getElementById('snack-status-list');
+    const summaryEl = document.getElementById('snack-status-summary');
+    const snacks = data.snackHistory || [];
+
+    if (snacks.length === 0) {
+        snackBox.classList.add('hidden');
+    } else {
+        snackBox.classList.remove('hidden');
+        const pendingCount = snacks.filter(s => s.status === '未交換').length;
+        summaryEl.textContent = pendingCount > 0 ? `（みうけとり ${pendingCount}こ）` : '（ぜんぶ こうかんずみ）';
+        snackList.innerHTML = snacks.slice().reverse().map(s => {
+            const done = s.status !== '未交換';
+            return `<div class="snack-status-item">
+                <span>${escapeHtml(s.grade)}賞 ${escapeHtml(s.itemName)}</span>
+                <span class="ss-status ${done ? 'done' : 'pending'}">${done ? 'こうかんずみ' : 'みうけとり'}</span>
+            </div>`;
+        }).join('');
+    }
+}
+
+function toggleSnackList() {
+    const list = document.getElementById('snack-status-list');
+    const icon = document.getElementById('snack-toggle-icon');
+    list.classList.toggle('hidden');
+    icon.textContent = list.classList.contains('hidden') ? '▼' : '▲';
 }
 
 function renderHistoryList() {
-    let history = JSON.parse(safeStore.get('soragokoro_history_all_' + currentUserId)) || [];
+    let history = JSON.parse(safeStore.get(localKey('history'))) || [];
     const listEl = document.getElementById('mypage-history-list');
     listEl.innerHTML = '';
     
@@ -647,14 +956,15 @@ function renderHistoryList() {
             const item = document.createElement('div');
             item.className = 'history-item';
             const displayTime = h.timeTaken ? h.timeTaken : '--:--';
+            const rank = escapeHtml(h.rank);
             item.innerHTML = `
                 <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
-                    <strong>${h.date} ${h.time}</strong>
-                    <span style="color:#666;">${h.subject}</span>
+                    <strong>${escapeHtml(h.date)} ${escapeHtml(h.time)}</strong>
+                    <span style="color:#666;">${escapeHtml(h.subject)}</span>
                 </div>
-                ランク: <span class="rank-badge bg-${h.rank}">${h.rank}</span> 
-                <span style="margin-left:10px; font-weight:bold; color:#e91e63;">正解率: ${h.score}%</span> 
-                <span style="margin-left:10px; color:#555;">時間: ${displayTime}</span> (${h.total}問)
+                ランク: <span class="rank-badge bg-${rank}">${rank}</span>
+                <span style="margin-left:10px; font-weight:bold; color:#e91e63;">正解率: ${escapeHtml(h.score)}%</span>
+                <span style="margin-left:10px; color:#555;">時間: ${escapeHtml(displayTime)}</span> (${escapeHtml(h.total)}問)
             `;
             listEl.appendChild(item);
         });
@@ -672,7 +982,7 @@ function changeMonth(offset) {
 }
 
 function updateMyPageCalendar() {
-    let stamps = JSON.parse(safeStore.get('soragokoro_stamps_all_' + currentUserId)) || [];
+    let stamps = JSON.parse(safeStore.get(localKey('stamps'))) || [];
     document.getElementById('mypage-cal-title').textContent = `${currentCalYear}年 ${currentCalMonth + 1}月`;
     renderCalendar('mypage-calendar-grid', stamps, false, currentCalYear, currentCalMonth);
 }
@@ -779,28 +1089,38 @@ function playPopSound() {
     osc.stop(audioCtx.currentTime + 0.15);
 }
 
-function fetchQuestionsFromSheet(subject, gradeVal, count, callback) {
+// GAS は問題が0件のとき「〜のデータが見つかりませんでした」というダミー問題を返すので、それを取りのぞく
+function isPlaceholderQuestion(q) {
+    const text = String(q.q || '');
+    return text.includes('データが見つかりませんでした') || text.includes('まだ登録されていません') || text.includes('準備中');
+}
+
+// スプレッドシートの数値セルは数値のまま届くので、答えと選択肢を文字列にそろえる（そろえないと数字の答えが必ず×になる）
+function normalizeQuestion(q) {
+    const choices = (q.choices || []).map(c => String(c).trim());
+    return Object.assign({}, q, { q: String(q.q), a: String(q.a).trim(), choices: choices.filter((c, i) => choices.indexOf(c) === i) });
+}
+
+// onSuccess(questions) … 問題の配列（0件なら空配列）／ onError(err) … 通信エラーなど
+function fetchQuestionsFromSheet(subject, gradeVal, count, onSuccess, onError) {
     let sendSubject = subject;
     if (subject === '数学' || subject === '算数') {
         sendSubject = (gradeVal <= 6) ? '算数' : '数学';
     }
-    
+
     callGAS({ action: "getQuestions", subject: sendSubject, grade: gradeVal, count: count })
     .then(data => {
-        if (data.status === "success" && data.questions && data.questions.length > 0) {
-            let questions = data.questions;
-            if (subject === 'まとめ' && gradeVal <= 6) {
-                const excluded = ['英語', '技術・家庭科', '家庭科', '保健体育', '面接'];
-                questions = questions.filter(q => !excluded.includes(q.subject));
-            }
-            callback(questions);
-        } else {
-            callback([{ q: "この条件の問題はまだ登録されていません", choices: ["OK", "NG", "YES", "NO"], a: "OK", subject: subject }]);
+        if (data.status !== "success") throw new Error(data.message || '問題を取得できませんでした');
+        let questions = (data.questions || []).filter(q => !isPlaceholderQuestion(q)).map(normalizeQuestion);
+        if (subject === 'まとめ' && gradeVal <= 6) {
+            const excluded = ['技術・家庭科', '保健体育', '面接'];   // 家庭科（小5・6）は「ひみつの問題」として出す
+            questions = questions.filter(q => !excluded.includes(q.subject));
         }
+        onSuccess(questions);
     })
     .catch(err => {
         console.error("問題取得エラー:", err);
-        callback([{ q: "通信エラーが発生しました", choices: ["OK", "NG", "YES", "NO"], a: "OK", subject: subject }]);
+        onError(err);
     });
 }
 
@@ -894,7 +1214,9 @@ function selectSubject(subj) {
     const gradeSelect = document.getElementById('grade-select');
     const gradeLabel = document.getElementById('grade-select-label');
     gradeSelect.innerHTML = '';
-    
+    hideSettingsError();
+    setStartLoading(false);
+
     if (subj === '道徳' || subj === '技術・家庭科' || subj === '保健体育') {
         gradeGroup.style.display = 'none';
         } else if (subj === '面接') {
@@ -927,34 +1249,58 @@ function selectSubject(subj) {
     initAudio(); 
 }
 
+function setStartLoading(isLoading) {
+    const btn = document.getElementById('start-quiz-btn');
+    btn.disabled = isLoading;
+    btn.textContent = isLoading ? '⏳ 問題をよみこみ中...' : 'テストスタート！';
+}
+function showSettingsError(msg) {
+    const el = document.getElementById('settings-error');
+    el.textContent = msg; el.classList.remove('hidden');
+    setStartLoading(false);
+}
+function hideSettingsError() { document.getElementById('settings-error').classList.add('hidden'); }
+
+// 設定画面の「もどる」：読み込み中のテストがあれば取り消す
+function backFromSettings() {
+    quizSession++;
+    setStartLoading(false);
+    renderTopScreen();
+}
+
 function startQuiz() {
+    if (document.getElementById('start-quiz-btn').disabled) return;   // 2回押し防止
+    const session = ++quizSession;
+    const isCurrent = () => session === quizSession;                   // 読み込み中に「もどる」されたら何もしない
+    hideSettingsError();
+    setStartLoading(true);
+
     const gradeSelect = document.getElementById('grade-select');
     const gradeVal = gradeSelect.options.length > 0 ? parseInt(gradeSelect.value) || gradeSelect.value : (currentAppMode === 'sho' ? 1 : 7);
     const count = parseInt(document.getElementById('count-select').value);
-    
+    currentQuizGrade = gradeVal;   // まとめテストの学年Sボーナス判定用に記録しておく
+    const netErrorMsg = '通信エラーで問題をよみこめませんでした。もう一度「テストスタート！」をおしてね。';
+
     if (selectedSubject === '数学' || selectedSubject === '算数') {
-        if (parseInt(gradeVal) <= 6) {
-            fetchQuestionsFromSheet('算数', gradeVal, count, (questions) => {
-                if (questions[0].q.includes("まだ登録されていません")) {
-                    currentQuestions = [];
-                    for (let i = 0; i < count; i++) currentQuestions.push(generateMathQuestion(gradeVal));
-                } else {
-                    currentQuestions = questions;
-                    shuffle(currentQuestions);
-                    currentQuestions = currentQuestions.slice(0, count);
-                }
-                initQuizExecution();
-            });
-        } else {
-            currentQuestions = [];
-            for (let i = 0; i < count; i++) currentQuestions.push(generateMathQuestion(gradeVal));
+        // シートの問題を使い、足りない分は自動で作った計算問題でうめる（通信できないときは全部自動）
+        const mathSubject = parseInt(gradeVal) <= 6 ? '算数' : '数学';
+        const fillWithGenerated = (sheetQs) => {
+            const picked = shuffle(sheetQs).slice(0, count);
+            while (picked.length < count) picked.push(generateMathQuestion(gradeVal));
+            return shuffle(picked);
+        };
+        fetchQuestionsFromSheet(mathSubject, gradeVal, count, (questions) => {
+            if (!isCurrent()) return;
+            currentQuestions = fillWithGenerated(questions);
             initQuizExecution();
-        }
+        }, () => {
+            if (!isCurrent()) return;
+            currentQuestions = fillWithGenerated([]);
+            initQuizExecution();
+        });
     } else if (selectedSubject === 'まとめ') {
         fetchQuestionsFromSheet('まとめ', gradeVal, 100, (sheetQuestions) => {
-            if(sheetQuestions.length > 0 && sheetQuestions[0].q.includes("登録されていません")) {
-                sheetQuestions = [];
-            }
+            if (!isCurrent()) return;
 
             const weightMap = {
                 1: { "国語": 3, "算数": 3, "英語": 3, "道徳": 1 },
@@ -999,7 +1345,10 @@ function startQuiz() {
                 if (reqCount === 0) return;
                 
                 if (s === '算数' || s === '数学') {
-                    for(let i = 0; i < reqCount; i++) finalTest.push(generateMathQuestion(gVal));
+                    // シートの問題があれば先に使い、足りない分を自動で作る
+                    const fromSheet = sheetQuestions.filter(q => q.subject === s).slice(0, reqCount);
+                    finalTest = finalTest.concat(fromSheet);
+                    for (let i = fromSheet.length; i < reqCount; i++) finalTest.push(generateMathQuestion(gVal));
                 } else {
                     let available = sheetQuestions.filter(q => q.subject === s);
                     finalTest = finalTest.concat(available.slice(0, reqCount));
@@ -1022,21 +1371,32 @@ function startQuiz() {
 
             shuffle(finalTest);
             currentQuestions = finalTest;
-            
+
             if (currentQuestions.length === 0) {
-                currentQuestions = [{ q: "準備中の問題です", choices: ["OK", "NG", "YES", "NO"], a: "OK", subject: "まとめ" }];
+                showSettingsError('この学年の問題はまだ登録されていません。');
+                return;
             }
             initQuizExecution();
+        }, () => {
+            if (isCurrent()) showSettingsError(netErrorMsg);
         });
     } else {
         fetchQuestionsFromSheet(selectedSubject, gradeVal, count, (questions) => {
-            currentQuestions = questions;
+            if (!isCurrent()) return;
+            if (questions.length === 0) {
+                showSettingsError('この条件の問題はまだ登録されていません。');
+                return;
+            }
+            currentQuestions = questions.slice(0, count);
             initQuizExecution();
+        }, () => {
+            if (isCurrent()) showSettingsError(netErrorMsg);
         });
     }
 }
 
 function initQuizExecution() {
+    setStartLoading(false);
     currentIndex = 0;
     userResults = [];
     if (isSoundOn) startBGM();
@@ -1052,6 +1412,7 @@ function formatTime(seconds) {
 }
 
 function startTimer() {
+    stopTimer();   // 前のタイマーが残っていたら止める
     startTime = Date.now(); elapsedSeconds = 0;
     document.querySelectorAll('.timer-display').forEach(el => el.textContent = '⏱ 00:00');
     timerInterval = setInterval(() => {
@@ -1068,8 +1429,10 @@ function advanceQuiz() {
         if (currentIndex === Math.floor(total / 2) - 1) yellMsg = "半分クリア！その調子！";
         else if (total - currentIndex === 3) yellMsg = "あと少し！がんばれ！";
     }
+    const session = quizSession;
     setTimeout(() => {
-        if (yellMsg && isSoundOn) showYellEffect(yellMsg);
+        if (session !== quizSession) return;   // 1秒の間に「やめる」が押されたら進まない
+        if (yellMsg) showYellEffect(yellMsg);
         currentIndex++;
         if (currentIndex < currentQuestions.length) {
             renderQuestion();
@@ -1088,6 +1451,7 @@ function renderQuestion() {
         badge.style.display = 'inline-block'; badge.textContent = qData.subject;
     } else { badge.style.display = 'none'; }
 
+    stopSpeech();
     const listenBtn = document.getElementById('en-listen-btn');
     if (qData.listenWord) {
         listenBtn.style.display = 'inline-block';
@@ -1111,8 +1475,12 @@ function renderQuestion() {
 function playEnAudioCurrent() {
     const qData = currentQuestions[currentIndex];
     if (qData && qData.listenWord && 'speechSynthesis' in window) {
+        stopSpeech();
         const msg = new SpeechSynthesisUtterance(qData.listenWord); msg.lang = 'en-US'; msg.rate = 0.9; window.speechSynthesis.speak(msg);
     }
+}
+function stopSpeech() {
+    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
 }
 
 function handleAnswer(selectedChoice, btnElement) {
@@ -1144,7 +1512,7 @@ function showYellEffect(msg) {
 }
 
 function finishQuiz() {
-    stopTimer(); stopBGM(); showScreen('screen-result');
+    stopTimer(); stopBGM(); stopSpeech(); showScreen('screen-result');
     const correctCount = userResults.filter(r => r.isCorrect).length;
     const total = currentQuestions.length;
     const accuracy = Math.round((correctCount / total) * 100);
@@ -1170,11 +1538,11 @@ function finishQuiz() {
 
     userResults.forEach((result, index) => {
         const item = document.createElement('div'); item.className = `result-item ${result.isCorrect ? 'correct' : 'wrong'}`;
-        let answerHTML = result.isCorrect 
-            ? `<div class="a-text"><span style="color:var(--correct-color); font-weight:bold;">あなたの回答: ${result.userAnswer} (正解)</span></div>`
-            : `<div class="a-text"><span style="color:var(--wrong-color); font-weight:bold; text-decoration:line-through;">あなたの回答: ${result.userAnswer}</span><br><span style="color:var(--correct-color); font-weight:bold;">正しい答え: ${result.correctAnswer}</span></div>`;
-        
-        item.innerHTML = `<div class="q-text">Q${index + 1}. [${result.subject}] ${result.question}</div>${answerHTML}`;
+        let answerHTML = result.isCorrect
+            ? `<div class="a-text"><span style="color:var(--correct-color); font-weight:bold;">あなたの回答: ${escapeHtml(result.userAnswer)} (正解)</span></div>`
+            : `<div class="a-text"><span style="color:var(--wrong-color); font-weight:bold; text-decoration:line-through;">あなたの回答: ${escapeHtml(result.userAnswer)}</span><br><span style="color:var(--correct-color); font-weight:bold;">正しい答え: ${escapeHtml(result.correctAnswer)}</span></div>`;
+
+        item.innerHTML = `<div class="q-text">Q${index + 1}. [${escapeHtml(result.subject)}] ${escapeHtml(result.question)}</div>${answerHTML}`;
         resultList.appendChild(item);
 
         if (result.isCorrect) correctTexts.push(`[${result.subject}] Q${index + 1}. ${result.question}`);
@@ -1186,7 +1554,7 @@ function finishQuiz() {
         recordSubject = '算数';
     }
 
-    let history = JSON.parse(safeStore.get('soragokoro_history_all_' + currentUserId)) || [];
+    let history = JSON.parse(safeStore.get(localKey('history'))) || [];
     const now = new Date();
     const displayTime = formatTime(elapsedSeconds);
     history.push({
@@ -1195,7 +1563,7 @@ function finishQuiz() {
         subject: recordSubject, rank: rank, score: accuracy, total: total, timeTaken: displayTime
     });
     if(history.length > 50) history.shift();
-    safeStore.set('soragokoro_history_all_' + currentUserId, JSON.stringify(history));
+    safeStore.set(localKey('history'), JSON.stringify(history));
 
     const shareBtn = document.getElementById('share-btn');
     if (selectedSubject === 'まとめ') {
@@ -1209,20 +1577,84 @@ function finishQuiz() {
 function sendDataToGAS(rankStr, scoreNumber, totalQuestions, timeStr, correctAnswersText, wrongAnswersText) {
     if (!GAS_URL) return;
     const payload = { 
-        action: "submit", name: currentUser, rank: rankStr, score: scoreNumber, 
+        action: "submit", name: currentUser, id: currentUserId, subject: selectedSubject, grade: currentQuizGrade,
+        rank: rankStr, score: scoreNumber, 
         totalQuestions: totalQuestions, time: timeStr, 
         correctAnswers: correctAnswersText, wrongAnswers: wrongAnswersText 
     };
     callGAS(payload)
-    .then(() => console.log("送信完了")).catch(err => console.error("送信エラー", err));
+    .then(res => {
+        console.log("送信完了");
+        // 学年ごとの本日Sボーナスが付与されたら、ポイントを更新してエフェクトを見せる
+        if (res && res.sBonusAwarded) {
+            currentPoints = res.points;
+            showSBonusEffect();
+        } else if (res && res.sBonusAlready) {
+            showSBonusInfo();
+        }
+    })
+    .catch(err => console.error("送信エラー", err));
 }
 
-function resetApp() { stopTimer(); stopBGM(); renderTopScreen(); }
+// 学年Sボーナス獲得時の「+1pt」エフェクト
+function showSBonusEffect() {
+    const container = document.getElementById('app-container');
+    const wrap = document.createElement('div');
+    wrap.className = 'sbonus-wrap';
+    const el = document.createElement('div');
+    el.className = 'sbonus-effect';
+    el.textContent = '🎉 きょうの はじめてのS！ +1pt ゲット！';
+    wrap.appendChild(el);
+    // トップページのキャラが下からジャンプして登場
+    const rise = Math.round((container.clientHeight || 700) * 0.42);
+    [12, 40, 68].forEach((left, i) => {
+        const c = document.createElement('div');
+        c.className = 'sbonus-char';
+        c.style.left = left + '%';
+        c.style.setProperty('--rise', '-' + rise + 'px');
+        c.style.animationDelay = (i * 0.15) + 's';
+        const img = document.createElement('img');
+        img.src = GT_CHAR_IMGS[i % GT_CHAR_IMGS.length];
+        img.alt = ''; img.draggable = false;
+        img.onerror = () => { c.textContent = ['🐰', '🐻', '🐼'][i]; c.style.fontSize = '4rem'; };
+        c.appendChild(img);
+        wrap.appendChild(c);
+    });
+    container.appendChild(wrap);
+    spawnFxParticles(wrap, { emojis: ['✨', '⭐', '🎉'], count: 18, spread: 200, duration: 1.3 });
+    playPopSound();
+    setTimeout(() => wrap.remove(), 3300);
+}
+
+// 同じ学年のSは1日1回だけ。2回目以降は演出のかわりにお知らせを出す
+function showSBonusInfo() {
+    const container = document.getElementById('app-container');
+    const el = document.createElement('div');
+    el.className = 'sbonus-effect sbonus-info';
+    el.textContent = 'きょうの この学年の Sボーナスは もらいずみだよ';
+    container.appendChild(el);
+    setTimeout(() => el.remove(), 2300);
+}
+
+function resetApp() { quizSession++; stopTimer(); stopBGM(); stopSpeech(); renderTopScreen(); }
 
 async function shareResult() {
     const captureArea = document.getElementById('capture-area');
     try {
-        const canvas = await html2canvas(captureArea, { scale: 2, backgroundColor: '#fff9e6' });
+        const canvas = await html2canvas(captureArea, {
+            scale: 2, backgroundColor: '#fff9e6',
+            // html2canvas はグラデーション文字（background-clip: text）を描けないので、画像用には普通の色の文字にする
+            onclone: (doc) => {
+                const r = doc.getElementById('rank-display');
+                if (r && r.classList.contains('rank-S')) {
+                    r.style.background = 'none';
+                    r.style.webkitBackgroundClip = 'border-box';
+                    r.style.backgroundClip = 'border-box';
+                    r.style.color = '#FF8C00';
+                    r.style.textShadow = '3px 3px 0 #FFD700';
+                }
+            }
+        });
         const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
         if (navigator.canShare) {
             const file = new File([blob], 'soragokoro_result.png', { type: 'image/png' });
@@ -1230,11 +1662,17 @@ async function shareResult() {
                 await navigator.share({ title: 'そらごころテストの結果', text: 'テストけっかを見てね！', files: [file] });
             } else { downloadFallback(blob); }
         } else { downloadFallback(blob); }
-    } catch (error) { alert("エラーが発生しました。"); }
+    } catch (error) {
+        if (error && error.name === 'AbortError') return;   // 共有画面を閉じただけならエラーにしない
+        console.error(error);
+        alert("エラーが発生しました。");
+    }
 }
 function downloadFallback(blob) {
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a'); a.href = url; a.download = 'soragokoro_result.png'; a.click(); URL.revokeObjectURL(url);
+    const a = document.createElement('a'); a.href = url; a.download = 'soragokoro_result.png';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);   // すぐ消すと保存に失敗するブラウザがある
 }
 
 function initAudio() {
@@ -1303,7 +1741,7 @@ function playResultSound(rank) {
 // ==========================================
 // どの画面でどのBGMを流すか（ログイン画面・結果画面は無音）
 const BGM_BY_SCREEN = {
-    'screen-grade-select': 'top', 'screen-bonus': 'top', 'screen-mypage': 'top',
+    'screen-grade-select': 'top', 'screen-bonus': 'top', 'screen-mypage': 'top', 'screen-password': 'top',
     'screen-top': 'top', 'screen-kakitori-menu': 'top', 'screen-settings': 'top',
     'screen-quiz': 'focus'
 };
@@ -1445,6 +1883,518 @@ function updateBGM(screenId) {
 
 // 旧コードとの互換（テスト開始時に呼ばれる）
 function startBGM(mode) { setBGM(mode || 'focus'); }
+
+// ==========================================
+// ★ ガチャ
+// ==========================================
+function openGacha() {
+    resetGachaScreen();
+    showScreen('screen-gacha');
+}
+function closeGacha() {
+    clearGachaTimers();
+    renderMyPage();
+}
+function clearGachaTimers() {
+    gachaTimers.forEach(t => clearTimeout(t)); gachaTimers = [];
+    stopGachaFxLoop();
+    gachaFxPhase = 'idle';
+    const overlay = document.getElementById('gacha-fx-overlay');
+    if (overlay) { overlay.className = 'gacha-fx-overlay hidden'; overlay.innerHTML = ''; }
+    document.getElementById('app-container').classList.remove('gacha-shake-hard');
+}
+
+function resetGachaScreen() {
+    clearGachaTimers();
+    gachaResultData = null;
+    const stage = document.getElementById('gacha-stage');
+    stage.className = '';
+    stage.innerHTML = '<div class="gacha-machine">🎰</div>';
+    const area = document.getElementById('gacha-result-area');
+    area.classList.add('hidden'); area.innerHTML = '';
+    document.getElementById('gacha-points-display').textContent = `🪙 ${currentPoints} Pt`;
+    const drawBtn = document.getElementById('gacha-draw-btn');
+    drawBtn.style.display = 'block';
+    drawBtn.disabled = currentPoints < 10;
+    drawBtn.textContent = currentPoints < 10 ? 'ポイントが たりません' : '10pt で ガチャをまわす！';
+    document.getElementById('gacha-skip-btn').style.display = 'none';
+    document.getElementById('gacha-again-btn').style.display = 'none';
+    document.getElementById('gacha-back-btn').style.display = 'none';
+}
+
+function startGachaDraw() {
+    if (currentPoints < 10) return;
+    initAudio();
+    document.getElementById('gacha-draw-btn').style.display = 'none';
+    document.getElementById('gacha-skip-btn').style.display = 'block';
+
+    const stage = document.getElementById('gacha-stage');
+    stage.className = '';
+    stage.innerHTML = '<div class="gacha-machine spinning">🎰</div><div class="gacha-ball">🔮</div><div class="gacha-caption" id="gacha-caption">なにが でるかな…？</div>';
+    playGachaSound('start');
+    openGachaTheater(); // ★ 最初から全画面演出
+
+    callGAS({ action: "gacha", id: currentUserId })
+        .then(res => {
+            if (res.status !== 'success') {
+                alert(res.message || 'ガチャに しっぱいしました');
+                resetGachaScreen();
+                return;
+            }
+            currentPoints = res.remainingPoints;
+            gachaResultData = res;
+            playGachaAnimation(res);
+        })
+        .catch(err => {
+            console.error('ガチャ通信エラー', err);
+            alert('つうしんエラーが おきました');
+            resetGachaScreen();
+        });
+}
+
+// パチンコ風の演出：ぐるぐる→（A/Sだけ）リーチ→確定→開封、で約10秒
+// ★ 演出は最初から全画面（シアター）で行い、キャラが画面のあちこちから飛び出してくる
+let gachaFxPhase = 'idle';   // 'wait' | 'reach' | 'kakutei'
+let gachaFxGrade = null;
+let gachaFxLoop = null;
+const GT_GENERIC = ['🐰', '🐻', '🐼', '🐥', '🐱', '🐶', '🦊', '🐸'];
+const GT_CHARS = {
+    C: ['🐥', '🐰', '🐹', '🐸'],
+    B: ['🐱', '🐶', '🐼', '🐨', '🦊'],
+    A: ['🦊', '🐯', '🦁', '🐺', '🔥'],
+    S: ['🦄', '🐉', '🦚', '👑', '🌈', '🐲']
+};
+const GT_HERO = { C: '🐰', B: '🐱', A: '🦁', S: '🦄' };
+
+function pickOne(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+// ★ トップページで歩いているキャラ（Miki / Haru / Yuki）を演出にも使う。読み込めないときは絵文字にする
+const GT_CHAR_IMGS = ['Miki', 'Haru', 'Yuki'].map(n => 'https://api.dicebear.com/9.x/big-smile/svg?seed=' + n + '&backgroundColor=transparent');
+function fillCharNode(el, emoji, sizeRem, imgRate) {
+    if (Math.random() < (imgRate === undefined ? 0.65 : imgRate)) {
+        const img = document.createElement('img');
+        img.src = pickOne(GT_CHAR_IMGS);
+        img.alt = ''; img.draggable = false;
+        img.style.cssText = 'display:block;width:auto;height:' + (sizeRem * 1.15) + 'rem;';
+        img.onerror = () => { el.textContent = emoji; };
+        el.appendChild(img);
+    } else {
+        el.textContent = emoji;
+    }
+}
+
+function setGachaCaption(text) {
+    ['gacha-caption', 'gt-caption'].forEach(id => { const e = document.getElementById(id); if (e) e.textContent = text; });
+}
+
+function openGachaTheater() {
+    const overlay = document.getElementById('gacha-fx-overlay');
+    if (!overlay) return;
+    overlay.className = 'gacha-fx-overlay theater';
+    overlay.innerHTML =
+        '<div class="gt-rays"></div>' +
+        '<div class="gt-center"><div class="gt-machine">🎰</div><div class="gt-orb">🔮</div></div>' +
+        '<div class="gt-layer" id="gt-layer"></div>' +
+        '<div class="gt-caption" id="gt-caption">なにが でるかな…？</div>' +
+        '<button class="gacha-fx-skip" onclick="skipGachaAnimation()">スキップ ▶</button>';
+    gachaFxPhase = 'wait';
+    gachaFxGrade = null;
+    startGachaFxLoop();
+}
+
+function startGachaFxLoop() {
+    stopGachaFxLoop();
+    gachaFxLoop = setInterval(() => {
+        const layer = document.getElementById('gt-layer');
+        if (!layer || layer.children.length > 70) return;
+        const g = gachaFxGrade;
+        if (gachaFxPhase === 'wait') {
+            spawnPeekChar(layer, pickOne(GT_GENERIC));
+            if (Math.random() < 0.6) spawnEdgeChar(layer, pickOne(GT_GENERIC));
+        } else if (gachaFxPhase === 'reach') {
+            const set = (g === 'A' || g === 'S') ? GT_CHARS[g] : GT_GENERIC;
+            spawnEdgeChar(layer, pickOne(set));
+            spawnZoomChar(layer, pickOne(set), (g === 'A' || g === 'S') ? 4 : 2.5);
+        } else if (gachaFxPhase === 'kakutei') {
+            const set = GT_CHARS[g] || GT_GENERIC;
+            const n = g === 'S' ? 3 : (g === 'A' ? 2 : 1);
+            for (let i = 0; i < n; i++) spawnZoomChar(layer, pickOne(set), g === 'S' ? 6 : (g === 'A' ? 5 : 3.5));
+        }
+    }, 170);
+}
+function stopGachaFxLoop() { if (gachaFxLoop) { clearInterval(gachaFxLoop); gachaFxLoop = null; } }
+
+// 画面の下からひょっこり顔を出すキャラ
+function spawnPeekChar(layer, emoji) {
+    const el = document.createElement('span');
+    el.className = 'gt-peek';
+    const size = 3 + Math.random() * 2.5;
+    fillCharNode(el, emoji, size);
+    el.style.left = (5 + Math.random() * 90) + '%';
+    el.style.fontSize = size + 'rem';
+    const dur = 1.2 + Math.random() * 0.8;
+    el.style.setProperty('--dur', dur + 's');
+    layer.appendChild(el);
+    gachaTimers.push(setTimeout(() => el.remove(), dur * 1000 + 80));
+}
+
+// 画面の端から端へ駆け抜けるキャラ
+function spawnEdgeChar(layer, emoji) {
+    const w = layer.clientWidth || 360, h = layer.clientHeight || 640;
+    const side = Math.floor(Math.random() * 4);
+    let sx, sy, ex, ey;
+    if (side === 0) { sx = -70; sy = Math.random() * h; ex = w + 70; ey = Math.random() * h; }
+    else if (side === 1) { sx = w + 70; sy = Math.random() * h; ex = -70; ey = Math.random() * h; }
+    else if (side === 2) { sx = Math.random() * w; sy = h + 70; ex = Math.random() * w; ey = -70; }
+    else { sx = Math.random() * w; sy = -70; ex = Math.random() * w; ey = h + 70; }
+    const el = document.createElement('span');
+    el.className = 'gt-edge';
+    const dur = 1.3 + Math.random() * 0.9;
+    const size = 2.5 + Math.random() * 2.5;
+    fillCharNode(el, emoji, size);
+    el.style.fontSize = size + 'rem';
+    el.style.setProperty('--sx', sx + 'px'); el.style.setProperty('--sy', sy + 'px');
+    el.style.setProperty('--ex', ex + 'px'); el.style.setProperty('--ey', ey + 'px');
+    el.style.setProperty('--rot', (Math.random() * 720 - 360) + 'deg');
+    el.style.setProperty('--dur', dur + 's');
+    layer.appendChild(el);
+    gachaTimers.push(setTimeout(() => el.remove(), dur * 1000 + 80));
+}
+
+// 画面中央から手前に向かって巨大化しながら飛び出してくるキャラ
+function spawnZoomChar(layer, emoji, maxScale) {
+    const w = layer.clientWidth || 360, h = layer.clientHeight || 640;
+    const angle = Math.random() * Math.PI * 2;
+    const el = document.createElement('span');
+    el.className = 'gt-zoom';
+    fillCharNode(el, emoji, 3);
+    const dur = 0.9 + Math.random() * 0.7;
+    el.style.setProperty('--tx', (Math.cos(angle) * w * 0.55) + 'px');
+    el.style.setProperty('--ty', (Math.sin(angle) * h * 0.55) + 'px');
+    el.style.setProperty('--sc', (maxScale * (0.6 + Math.random() * 0.6)).toFixed(2));
+    el.style.setProperty('--rot', (Math.random() * 80 - 40) + 'deg');
+    el.style.setProperty('--dur', dur + 's');
+    layer.appendChild(el);
+    gachaTimers.push(setTimeout(() => el.remove(), dur * 1000 + 80));
+}
+
+function playGachaAnimation(res) {
+    const stage = document.getElementById('gacha-stage');
+    const overlay = document.getElementById('gacha-fx-overlay');
+    const grade = res.grade;
+
+    gachaTimers.push(setTimeout(() => {
+        gachaFxPhase = 'reach';
+        gachaFxGrade = grade;
+        if (grade === 'A' || grade === 'S') {
+            stage.classList.add('gacha-reach');
+            if (overlay) overlay.classList.add('phase-reach');
+            setGachaCaption(grade === 'S' ? '…！？ なにかが おきている…' : 'これは…アツいぞ…！');
+            playGachaSound('reach');
+        } else {
+            setGachaCaption('そろそろ とまるかな…？');
+        }
+    }, 3000));
+
+    gachaTimers.push(setTimeout(() => {
+        if (grade === 'A') {
+            stage.classList.remove('gacha-reach'); stage.classList.add('gacha-flash-a');
+            setGachaCaption('🔥 A賞 かくてい！！ 🔥');
+        } else if (grade === 'S') {
+            stage.classList.remove('gacha-reach'); stage.classList.add('gacha-flash-s');
+            setGachaCaption('🌈 S賞 かくてい！！！ 🌈');
+        } else {
+            setGachaCaption(grade + '賞 かくてい！');
+        }
+        triggerGachaFx(grade); // ★ 全画面のかくてい演出（等級で派手さが変わる）
+    }, 6000));
+
+    gachaTimers.push(setTimeout(() => showGachaResult(res), 10000));
+}
+
+// ★ 確定演出：フラッシュ＋巨大キャラがドーン＋バッジ＋パーティクル（Sはさらに紙吹雪＋連続花火）
+function triggerGachaFx(grade) {
+    const overlay = document.getElementById('gacha-fx-overlay');
+    const layer = document.getElementById('gt-layer');
+    if (!overlay || !layer || overlay.classList.contains('hidden')) return;
+    gachaFxGrade = grade;
+    gachaFxPhase = 'kakutei';
+    overlay.classList.remove('phase-reach');
+    overlay.classList.add('kakutei-' + grade);
+
+    const flash = document.createElement('div');
+    flash.className = 'gacha-fx-flash fx-flash-' + grade;
+    overlay.appendChild(flash);
+
+    const wrap = document.createElement('div');
+    wrap.className = 'gt-badge-wrap';
+    const hero = document.createElement('div');
+    hero.className = 'gt-hero hero-' + grade;
+    const heroCount = { C: 1, B: 1, A: 2, S: 3 }[grade] || 1;
+    const heroSize = { C: 9, B: 10, A: 7.5, S: 6.2 }[grade] || 8;
+    const heroOrder = GT_CHAR_IMGS.slice().sort(() => Math.random() - 0.5);
+    for (let i = 0; i < heroCount; i++) {
+        const img = document.createElement('img');
+        img.className = 'gt-hero-img';
+        img.src = heroOrder[i % heroOrder.length];
+        img.alt = ''; img.draggable = false;
+        img.style.height = heroSize + 'rem';
+        img.style.animationDelay = (i * 0.12) + 's';
+        img.onerror = () => {
+            const sp = document.createElement('span');
+            sp.textContent = GT_HERO[grade] || '🐰';
+            sp.style.fontSize = heroSize + 'rem';
+            img.replaceWith(sp);
+        };
+        hero.appendChild(img);
+    }
+    const badge = document.createElement('div');
+    badge.className = 'gacha-fx-badge badge-' + grade;
+    badge.textContent = (grade === 'S' ? '🌈 S賞！！！' : grade === 'A' ? '🔥 A賞！！' : grade + '賞');
+    wrap.appendChild(hero);
+    wrap.appendChild(badge);
+    overlay.appendChild(wrap);
+    requestAnimationFrame(() => badge.classList.add('show'));
+
+    const cfg = {
+        C: { emojis: ['✨'], count: 10, spread: 130, duration: 1.0 },
+        B: { emojis: ['✨', '💙', '⭐'], count: 20, spread: 170, duration: 1.2 },
+        A: { emojis: ['🔥', '⭐', '✨'], count: 32, spread: 220, duration: 1.4 },
+        S: { emojis: ['🌈', '⭐', '✨', '🎉', '💫'], count: 44, spread: 260, duration: 1.6 }
+    }[grade] || { emojis: ['✨'], count: 10, spread: 130, duration: 1.0 };
+    spawnFxParticles(layer, cfg);
+
+    if (grade === 'A' || grade === 'S') {
+        const appEl = document.getElementById('app-container');
+        appEl.classList.add('gacha-shake-hard');
+        gachaTimers.push(setTimeout(() => appEl.classList.remove('gacha-shake-hard'), 450));
+        playGachaSound(grade === 'S' ? 'kakutei_s' : 'kakutei');
+    } else {
+        playPopSound();
+    }
+
+    if (grade === 'S') {
+        spawnFxConfetti(layer, 60);
+        [350, 800, 1250, 1700, 2200].forEach(t => {
+            gachaTimers.push(setTimeout(() => {
+                const l = document.getElementById('gt-layer');
+                if (l) spawnFxParticles(l, { emojis: ['🎆', '🌟', '✨'], count: 18, spread: 240, duration: 1.2 });
+            }, t));
+        });
+    }
+}
+
+// 中心から放射状に飛び散るパーティクル（絵文字）
+function spawnFxParticles(container, opts) {
+    for (let i = 0; i < opts.count; i++) {
+        const el = document.createElement('span');
+        el.className = 'gacha-fx-particle';
+        el.textContent = opts.emojis[Math.floor(Math.random() * opts.emojis.length)];
+        const angle = Math.random() * Math.PI * 2;
+        const dist = 50 + Math.random() * (opts.spread || 140);
+        const delay = Math.random() * 0.25;
+        const dur = (opts.duration || 1.1) + Math.random() * 0.4;
+        el.style.setProperty('--dx', (Math.cos(angle) * dist) + 'px');
+        el.style.setProperty('--dy', (Math.sin(angle) * dist) + 'px');
+        el.style.setProperty('--dur', dur + 's');
+        el.style.setProperty('--delay', delay + 's');
+        el.style.fontSize = (1 + Math.random() * 1.2) + 'rem';
+        container.appendChild(el);
+        gachaTimers.push(setTimeout(() => el.remove(), (dur + delay) * 1000 + 80));
+    }
+}
+
+// 画面上から降ってくる紙吹雪（S賞専用）
+function spawnFxConfetti(container, count) {
+    const colors = ['#ff5252', '#ffca28', '#66bb6a', '#42a5f5', '#ab47bc', '#ff7043'];
+    for (let i = 0; i < count; i++) {
+        const el = document.createElement('span');
+        el.className = 'gacha-fx-confetti';
+        el.style.left = (Math.random() * 100) + '%';
+        el.style.background = colors[Math.floor(Math.random() * colors.length)];
+        const dur = 1.6 + Math.random() * 1.2;
+        const delay = Math.random() * 0.9;
+        el.style.setProperty('--dur', dur + 's');
+        el.style.setProperty('--delay', delay + 's');
+        container.appendChild(el);
+        gachaTimers.push(setTimeout(() => el.remove(), (dur + delay) * 1000 + 80));
+    }
+}
+
+function skipGachaAnimation() {
+    if (!gachaResultData) return;
+    clearGachaTimers();
+    showGachaResult(gachaResultData);
+}
+
+function showGachaResult(res) {
+    clearGachaTimers();
+    document.getElementById('gacha-skip-btn').style.display = 'none';
+    document.getElementById('gacha-points-display').textContent = `🪙 ${currentPoints} Pt`;
+
+    const stage = document.getElementById('gacha-stage');
+    stage.className = 'grade-' + res.grade;
+    stage.innerHTML = `<div class="gacha-result-badge">${escapeHtml(res.grade)}賞</div>`;
+
+    const area = document.getElementById('gacha-result-area');
+    area.classList.remove('hidden');
+    const snackNote = res.isSnack
+        ? '<p style="color:#e65100; font-weight:bold; text-align:center;">🍬 おかしと こうかんできるよ！<br>マイページの「おかしのこうかんじょうきょう」を みてね。</p>'
+        : '<p style="color:#4caf50; font-weight:bold; text-align:center;">🗂️ コレクションに ついかされたよ！</p>';
+    area.innerHTML = `
+        <div class="gacha-result-card grade-${escapeHtml(res.grade)}">
+            <div class="gacha-result-category">${escapeHtml(res.category)}</div>
+            <div class="gacha-result-name">${escapeHtml(res.itemName)}</div>
+        </div>
+        ${snackNote}
+    `;
+    playResultSound(res.grade === 'S' ? 'S' : (res.grade === 'A' ? 'A' : (res.grade === 'B' ? 'B' : 'C')));
+
+    const againBtn = document.getElementById('gacha-again-btn');
+    againBtn.style.display = 'block';
+    againBtn.disabled = currentPoints < 10;
+    document.getElementById('gacha-back-btn').style.display = 'block';
+}
+
+// ガチャ演出専用の効果音（開始／リーチ／確定）
+function playGachaSound(kind) {
+    if (!isSoundOn || !audioCtx) return;
+    const t = audioCtx.currentTime;
+    const beep = (freq, start, dur, type, vol) => {
+        const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+        o.type = type || 'sine'; o.frequency.setValueAtTime(freq, t + start);
+        g.gain.setValueAtTime(0.0001, t + start);
+        g.gain.linearRampToValueAtTime(vol || 0.2, t + start + 0.02);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + start + dur);
+        o.connect(g); g.connect(audioCtx.destination);
+        o.start(t + start); o.stop(t + start + dur + 0.05);
+    };
+    if (kind === 'start') { beep(440, 0, 0.15); beep(554, 0.15, 0.15); beep(659, 0.3, 0.2); }
+    else if (kind === 'reach') { beep(300, 0, 0.3, 'sawtooth', 0.15); beep(300, 0.4, 0.3, 'sawtooth', 0.15); }
+    else if (kind === 'kakutei') { [523, 659, 784, 1046].forEach((f, i) => beep(f, i * 0.12, 0.25, 'square', 0.25)); }
+    else if (kind === 'kakutei_s') { [523, 659, 784, 1046, 1318, 1568].forEach((f, i) => beep(f, i * 0.1, 0.3, 'square', 0.28)); }
+}
+
+// ==========================================
+// ★ パスワード変更
+// ==========================================
+const PW_FIELDS = ['pw-current', 'pw-new', 'pw-new2'];
+
+function openPasswordChange() {
+    PW_FIELDS.forEach(id => { const el = document.getElementById(id); el.value = ''; el.type = 'password'; });
+    document.getElementById('pw-show').checked = false;
+    document.getElementById('pw-message').className = 'hidden';
+    const btn = document.getElementById('pw-submit-btn');
+    btn.disabled = false; btn.textContent = 'かえる';
+    showScreen('screen-password');
+}
+
+function togglePasswordVisible() {
+    const show = document.getElementById('pw-show').checked;
+    PW_FIELDS.forEach(id => { document.getElementById(id).type = show ? 'text' : 'password'; });
+}
+
+function showPasswordMessage(text, isError) {
+    const el = document.getElementById('pw-message');
+    el.textContent = text;
+    el.className = isError ? 'error' : 'success';
+}
+
+function submitPasswordChange() {
+    const btn = document.getElementById('pw-submit-btn');
+    if (btn.disabled) return;
+    const cur = document.getElementById('pw-current').value.trim();
+    const next = document.getElementById('pw-new').value.trim();
+    const next2 = document.getElementById('pw-new2').value.trim();
+
+    if (!cur || !next || !next2) return showPasswordMessage('ぜんぶ いれてね', true);
+    if (next !== next2) return showPasswordMessage('あたらしい パスワードが 2かいとも おなじに なっていないよ', true);
+    if (next.length < 4 || next.length > 20) return showPasswordMessage('あたらしい パスワードは 4〜20もじに してね', true);
+    if (/\s/.test(next)) return showPasswordMessage('スペースは つかえないよ', true);
+    if (next === cur) return showPasswordMessage('いまと おなじ パスワードだよ', true);
+
+    btn.disabled = true; btn.textContent = '⏳ かえています...';
+    callGAS({ action: 'changePassword', id: currentUserId, currentPassword: cur, newPassword: next })
+        .then(res => {
+            btn.disabled = false; btn.textContent = 'かえる';
+            if (res.status === 'success') {
+                PW_FIELDS.forEach(id => { document.getElementById(id).value = ''; });
+                showPasswordMessage('パスワードを かえたよ！つぎから あたらしい パスワードで ログインしてね', false);
+            } else {
+                showPasswordMessage(res.message || 'かえられませんでした', true);
+            }
+        })
+        .catch(err => {
+            console.error('パスワード変更エラー', err);
+            btn.disabled = false; btn.textContent = 'かえる';
+            showPasswordMessage('つうしんエラーが おきました。もういちど ためしてね', true);
+        });
+}
+
+// ==========================================
+// ★ コレクション
+// ==========================================
+function openCollection() {
+    const cats = getCollectionCategories();
+    collectionActiveCategory = cats.indexOf(collectionActiveCategory) !== -1 ? collectionActiveCategory : (cats[0] || '');
+    renderCollectionTabs();
+    renderCollectionGrid();
+    showScreen('screen-collection');
+}
+
+function renderCollectionTabs() {
+    const tabs = document.getElementById('collection-tabs');
+    tabs.innerHTML = '';
+    const cats = getCollectionCategories();
+    if (cats.length === 0) return;
+    cats.forEach(cat => {
+        const btn = document.createElement('button');
+        btn.className = 'collection-tab' + (cat === collectionActiveCategory ? ' active' : '');
+        btn.textContent = cat;
+        btn.onclick = () => { collectionActiveCategory = cat; renderCollectionTabs(); renderCollectionGrid(); };
+        tabs.appendChild(btn);
+    });
+}
+
+function renderCollectionGrid() {
+    const grid = document.getElementById('collection-grid');
+    grid.innerHTML = '';
+    const items = myPossessions.filter(p => p.category === collectionActiveCategory);
+    if (items.length === 0) {
+        grid.innerHTML = '<div class="collection-empty">まだ もっていないよ<br>ガチャで あつめてみよう！</div>';
+        return;
+    }
+    // 同じ名前のアイテムは1つにまとめる（そうび中のものが1つでもあれば「そうび中」扱い）
+    const groups = [];
+    items.forEach(item => {
+        let g = groups.find(x => x.itemName === item.itemName);
+        if (!g) { g = { itemName: item.itemName, category: item.category, equipped: false, count: 0 }; groups.push(g); }
+        g.count++;
+        if (item.equipped) g.equipped = true;
+    });
+    groups.forEach(item => {
+        const el = document.createElement('div');
+        el.className = 'collection-item' + (item.equipped ? ' equipped' : '');
+        const countBadge = item.count > 1 ? ` <span class="ci-count">×${item.count}</span>` : '';
+        el.innerHTML = `<span class="ci-mark">${item.equipped ? '✅' : '⬜'}</span>${escapeHtml(item.itemName)}${countBadge}`;
+        el.onclick = () => equipCollectionItem(item);
+        grid.appendChild(el);
+    });
+}
+
+function equipCollectionItem(item) {
+    if (item.equipped) return;
+    callGAS({ action: "equip", id: currentUserId, itemName: item.itemName, category: item.category })
+        .then(res => {
+            if (res.status === 'success') {
+                myPossessions.forEach(p => { if (p.category === item.category) p.equipped = (p.itemName === item.itemName); });
+                renderCollectionGrid();
+            } else {
+                alert(res.message || 'そうびできませんでした');
+            }
+        })
+        .catch(err => { console.error('そうびエラー', err); alert('つうしんエラーが おきました'); });
+}
 
 // ==========================================
 // ★ ボタンのクリック音「ポチッ」

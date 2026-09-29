@@ -225,7 +225,7 @@
         100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); opacity: 1; }
     }
 
-    .history-container { background: #fff; border-radius: 15px; padding: 15px; box-shadow: 0 4px 0 #e0e0e0; margin-bottom: 0; flex: 1; display: flex; flex-direction: column; overflow: hidden;}
+    .history-container { background: #fff; border-radius: 15px; padding: 15px; box-shadow: 0 4px 0 #e0e0e0; margin-bottom: 0; flex: 1 0 auto; min-height: 220px; display: flex; flex-direction: column; overflow: hidden;}   /* 画面が小さくても、下にスクロールすれば見られるよう最低限の高さを持たせる */
     .history-title { font-size: 1.1rem; font-weight: bold; color: #444; margin-top: 0; border-bottom: 2px dashed #ccc; padding-bottom: 5px; display:flex; justify-content: space-between; flex-shrink: 0;}
     .history-list { flex: 1; overflow-y: auto; padding-right: 5px; }
     .history-item { background: #f1f8e9; padding: 10px; border-radius: 8px; margin-bottom: 8px; border-left: 5px solid #8bc34a; font-size: 0.95rem; }
@@ -244,10 +244,11 @@
     .result-item.correct { border-color: var(--correct-color); }
     .result-item.wrong { border-color: var(--wrong-color); }
     /* --- マイページ：ガチャ／コレクション導線・おかし交換状況 --- */
-    .mypage-action-row { display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin:10px auto 0; max-width: 320px; }
+    .mypage-action-row { display:grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap:5px; margin:10px 0 0; }   /* minmax(0,…)：文字が長くても画面の幅からはみ出さない */
+    .mypage-action-btn .ma-icon { display:block; font-size:1.3rem; line-height:1.2; }
     .room-action-btn { background:#8d6e63; box-shadow:0 3px 0 #5d4037; }
     .chara-action-btn { background:#7e57c2; box-shadow:0 3px 0 #512da8; }
-    .mypage-action-btn { padding:10px; font-size:1rem; border-radius:14px; border:none; box-shadow:0 3px 0 rgba(0,0,0,0.15); font-family:inherit; font-weight:900; cursor:pointer; color:white; }
+    .mypage-action-btn { padding:6px 0; font-size:0.72rem; letter-spacing:-0.5px; white-space:nowrap; overflow:hidden; min-width:0; border-radius:14px; border:none; box-shadow:0 3px 0 rgba(0,0,0,0.15); font-family:inherit; font-weight:900; cursor:pointer; color:white; }
     .gacha-action-btn { background:#e91e63; box-shadow:0 3px 0 #ad1457; }
     .collection-action-btn { background:#00bcd4; box-shadow:0 3px 0 #0097a7; }
 
@@ -528,10 +529,10 @@
             <h2 id="mypage-name-display">なまえ</h2>
             <div class="point-badge" id="mypage-points-display">🪙 0 Pt</div>
             <div class="mypage-action-row">
-                <button class="btn mypage-action-btn gacha-action-btn" onclick="openGacha()">🎰 ガチャ</button>
-                <button class="btn mypage-action-btn collection-action-btn" onclick="openCollection()">🗂️ コレクション</button>
-                <button class="btn mypage-action-btn room-action-btn" onclick="openRoom()">🏠 おへや</button>
-                <button class="btn mypage-action-btn chara-action-btn" onclick="openChara()">🙂 キャラ</button>
+                <button class="btn mypage-action-btn gacha-action-btn" onclick="openGacha()"><span class="ma-icon">🎰</span>ガチャ</button>
+                <button class="btn mypage-action-btn collection-action-btn" onclick="openCollection()"><span class="ma-icon">🗂️</span>コレクション</button>
+                <button class="btn mypage-action-btn room-action-btn" onclick="openRoom()"><span class="ma-icon">🏠</span>おへや</button>
+                <button class="btn mypage-action-btn chara-action-btn" onclick="openChara()"><span class="ma-icon">🙂</span>キャラ</button>
             </div>
             <button class="password-link-btn" onclick="openPasswordChange()">🔑 パスワードを かえる</button>
         </div>
@@ -2210,15 +2211,13 @@ function playGachaAnimation(res) {
     }, 3000));
 
     gachaTimers.push(setTimeout(() => {
+        // 「○賞かくてい」の文字は出さず、演出の派手さ（色・キャラの数・紙吹雪）だけで等級が伝わるようにする
         if (grade === 'A') {
             stage.classList.remove('gacha-reach'); stage.classList.add('gacha-flash-a');
-            setGachaCaption('🔥 A賞 かくてい！！ 🔥');
         } else if (grade === 'S') {
             stage.classList.remove('gacha-reach'); stage.classList.add('gacha-flash-s');
-            setGachaCaption('🌈 S賞 かくてい！！！ 🌈');
-        } else {
-            setGachaCaption(grade + '賞 かくてい！');
         }
+        setGachaCaption('');
         triggerGachaFx(grade); // ★ 全画面のかくてい演出（等級で派手さが変わる）
     }, 6000));
 
@@ -2261,13 +2260,9 @@ function triggerGachaFx(grade) {
         };
         hero.appendChild(img);
     }
-    const badge = document.createElement('div');
-    badge.className = 'gacha-fx-badge badge-' + grade;
-    badge.textContent = (grade === 'S' ? '🌈 S賞！！！' : grade === 'A' ? '🔥 A賞！！' : grade + '賞');
+    // 「S賞！！！」などの文字バッジは出さない（等級は演出の派手さで伝える）
     wrap.appendChild(hero);
-    wrap.appendChild(badge);
     overlay.appendChild(wrap);
-    requestAnimationFrame(() => badge.classList.add('show'));
 
     const cfg = {
         C: { emojis: ['✨'], count: 10, spread: 130, duration: 1.0 },

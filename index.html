@@ -406,6 +406,37 @@
     #pw-message.error { color: #f44336; background: #ffebee; }
     #pw-message.success { color: #2e7d32; background: #e8f5e9; }
 
+    /* --- そうびアイテム：フレーム（マイページの名前カード）--- */
+    .mypage-header.frame-normal { border: 5px double #8d6e63; box-shadow: 0 4px 0 #d7ccc8; }
+    .mypage-header.frame-silver { border: 4px solid #cfd8dc; box-shadow: 0 0 0 3px #90a4ae, 0 6px 14px rgba(96,125,139,0.45); background: linear-gradient(160deg, #ffffff, #eceff1); }
+    .mypage-header.frame-gold { border: 4px solid #ffc107; background: linear-gradient(160deg, #fffde7, #fff8e1); animation: frameAuraRed 1s ease-in-out infinite alternate; }
+    @keyframes frameAuraRed { from { box-shadow: 0 0 8px 2px rgba(244,67,54,0.45); } to { box-shadow: 0 0 22px 7px rgba(244,67,54,0.85); } }
+    .mypage-header.frame-rainbow { border: 5px solid transparent; background-image: linear-gradient(#fff,#fff), linear-gradient(270deg, #ff5252, #ffeb3b, #4caf50, #2196f3, #9c27b0, #ff5252); background-origin: border-box; background-clip: padding-box, border-box; background-size: 100% 100%, 600% 600%; animation: gachaRainbowBg 2.4s linear infinite; box-shadow: 0 0 18px rgba(255,0,150,0.3); }
+
+    /* --- そうびアイテム：おへや（家具とキャラ）--- */
+    .mypage-room { position: relative; height: 120px; border-radius: 15px; margin-bottom: 10px; flex-shrink: 0; overflow: hidden; border: 3px solid #d7ccc8;
+        background: linear-gradient(#fff3e0 0 62%, #d7a86e 62% 100%); display: flex; align-items: flex-end; justify-content: center; gap: 18px; padding-bottom: 8px; box-sizing: border-box; }
+    .mypage-room .room-title { position: absolute; top: 6px; left: 10px; font-size: 0.8rem; font-weight: 900; color: #8d6e63; }
+    .mypage-room .room-empty { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 0.85rem; font-weight: bold; color: #a1887f; padding: 0 10px; }
+    .room-furniture { font-size: 3.6rem; line-height: 1; filter: drop-shadow(0 4px 3px rgba(0,0,0,0.2)); }
+    .room-furniture.sparkle { animation: roomSparkle 1.6s ease-in-out infinite alternate; }
+    @keyframes roomSparkle { from { filter: drop-shadow(0 0 4px #ffe082); } to { filter: drop-shadow(0 0 16px #ffc107); } }
+    .room-chara { height: 84px; width: auto; animation: gtCharJump 0.7s ease-in-out infinite alternate; }
+
+    /* --- アイテムの見本（コレクション・ガチャ結果）--- */
+    .item-preview { display: flex; justify-content: center; align-items: center; min-height: 58px; margin-bottom: 6px; }
+    .item-preview .ip-emoji { font-size: 2.6rem; line-height: 1; }
+    .item-preview .ip-chara { height: 64px; width: auto; }
+    .item-preview .ip-frame { width: 64px; height: 44px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 900; color: #555; background: #fff; }
+    .ip-frame.frame-normal { border: 5px double #8d6e63; }
+    .ip-frame.frame-silver { border: 3px solid #cfd8dc; box-shadow: 0 0 0 2px #90a4ae; }
+    .ip-frame.frame-gold { border: 3px solid #ffc107; animation: frameAuraRed 1s ease-in-out infinite alternate; }
+    .ip-frame.frame-rainbow { border: 4px solid transparent; background-image: linear-gradient(#fff,#fff), linear-gradient(270deg, #ff5252, #ffeb3b, #4caf50, #2196f3, #9c27b0, #ff5252); background-origin: border-box; background-clip: padding-box, border-box; background-size: 100% 100%, 600% 600%; animation: gachaRainbowBg 2.4s linear infinite; }
+    .ip-try-btn { display: block; margin: 6px auto 0; padding: 4px 12px; border: none; border-radius: 14px; background: #7e57c2; color: #fff; font-family: inherit; font-weight: 900; font-size: 0.8rem; cursor: pointer; }
+
+    /* --- そうびアイテム：虹色エフェクトの ◯ --- */
+    #effect-overlay.rainbow-maru { background: linear-gradient(90deg, #ff5252, #ffeb3b, #4caf50, #2196f3, #9c27b0); background-size: 15rem 100%; background-position: center; background-repeat: no-repeat; -webkit-background-clip: text; background-clip: text; color: transparent !important; }
+
 </style>
 </head>
 <body>
@@ -476,7 +507,7 @@
         
         <h2 style="text-align:center; margin: 0 0 10px 0; color:#00bcd4; font-size:1.6rem; height: 35px; line-height: 35px;">👤 マイページ</h2>
         
-        <div class="mypage-header">
+        <div class="mypage-header" id="mypage-header">
             <h2 id="mypage-name-display">なまえ</h2>
             <div class="point-badge" id="mypage-points-display">🪙 0 Pt</div>
             <div class="mypage-action-row">
@@ -485,6 +516,9 @@
             </div>
             <button class="password-link-btn" onclick="openPasswordChange()">🔑 パスワードを かえる</button>
         </div>
+
+        <!-- そうびした家具とキャラを置く「おへや」 -->
+        <div class="mypage-room" id="mypage-room"></div>
 
         <div class="snack-status-box hidden" id="snack-status-box">
             <div class="snack-status-header" onclick="toggleSnackList()">
@@ -787,7 +821,12 @@ function loginApp() {
             isFirstLoginTodayFlag = data.isFirstLoginToday;
             if (!data.idShared) migrateLegacyHistory(id);   // 同じIDの人がいなければ、古いきろくを番号のほうへ移す
             cacheLoginDates(data.loginDates); // ★ ログイン履歴はスプレッドシートを正として端末に反映
-            
+            // そうび中のアイテム（音・スタンプ・エフェクトなど）をテストでも使えるよう、ログイン直後に読み込んでおく
+            myPossessions = [];
+            callGAS({ action: "getMyPageData", id: currentUserId })
+                .then(d => { if (d.status === 'success') applyMyPageData(d); })
+                .catch(err => console.error('そうび取得エラー', err));
+
             document.getElementById('mypage-points-display').textContent = `🪙 ${currentPoints} Pt`;
 
             if (saveCheck) {
@@ -830,6 +869,7 @@ function migrateLegacyHistory(loginId) {
 
 function logoutApp() {
     currentUser = ""; currentUserId = ""; currentLoginId = ""; currentPoints = 0; selectedFilterDate = null;
+    myPossessions = []; applyEquippedLooks();   // 前の人のそうび（音・フレームなど）を残さない
     document.getElementById('login-password').value = "";
     if (!document.getElementById('save-id-check').checked) document.getElementById('login-id').value = "";
     showScreen('screen-login');
@@ -911,6 +951,7 @@ function applyMyPageData(data) {
     document.getElementById('mypage-points-display').textContent = `🪙 ${currentPoints} Pt`;
     myPossessions = data.possessions || [];
     if (Array.isArray(data.loginDates)) { cacheLoginDates(data.loginDates); updateMyPageCalendar(); }
+    applyEquippedLooks();
 
     const snackBox = document.getElementById('snack-status-box');
     const snackList = document.getElementById('snack-status-list');
@@ -1053,7 +1094,7 @@ function renderCalendar(containerId, stamps, animateToday, year, month) {
         
         const stampEl = document.createElement('div');
         stampEl.className = 'stamp-mark';
-        stampEl.textContent = '💮';
+        stampEl.textContent = currentStampMark();   // そうび中の「すたんぷ」の絵（なければ 💮）
         
         if (stamps.includes(stampCheckStr)) {
             el.classList.add('has-stamp');
@@ -1497,11 +1538,14 @@ function handleAnswer(selectedChoice, btnElement) {
     advanceQuiz();
 }
 
-function showAnswerEffect(isCorrect) {
+// effectLook を渡すとそのえふぇくとで表示する（コレクションの「ためす」用）。省略時はそうび中のもの
+function showAnswerEffect(isCorrect, effectLook) {
+    const eff = effectLook !== undefined ? effectLook : getEquippedLook('えふぇくと');
     const overlay = document.getElementById('effect-overlay');
-    overlay.style.display = 'flex'; overlay.style.animation = 'none'; overlay.offsetHeight; 
+    overlay.style.display = 'flex'; overlay.style.animation = 'none'; overlay.offsetHeight;
     overlay.style.animation = 'pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-    if (isCorrect) { overlay.textContent = '◯'; overlay.style.color = 'rgba(76, 175, 80, 0.8)'; }
+    overlay.classList.toggle('rainbow-maru', !!(isCorrect && eff && eff.effect === 'rainbow'));
+    if (isCorrect) { overlay.textContent = '◯'; overlay.style.color = 'rgba(76, 175, 80, 0.8)'; playCorrectEffect(eff); }
     else { overlay.textContent = '×'; overlay.style.color = 'rgba(244, 67, 54, 0.8)'; }
     setTimeout(() => { overlay.style.display = 'none'; }, 800);
 }
@@ -1682,8 +1726,11 @@ function initAudio() {
     } catch (e) {}
 }
 
-function playSound(isCorrect) {
+// soundLook を渡すとその音で鳴らす（コレクションの「きいてみる」用）。省略時はそうび中のもの
+function playSound(isCorrect, soundLook) {
     if (!isSoundOn || !audioCtx) return;
+    const snd = soundLook !== undefined ? soundLook : getEquippedLook('さうんど');
+    if (snd && snd.sound === 'variation') { playVariationSound(isCorrect); return; }
     const osc = audioCtx.createOscillator(); const gainNode = audioCtx.createGain();
     osc.connect(gainNode); gainNode.connect(audioCtx.destination);
     if (isCorrect) {
@@ -1806,7 +1853,30 @@ const FOCUS_ARP = [
     [0,76,0,79,0,84,0,79], [0,72,0,76,0,81,0,76], [0,72,0,77,0,81,0,77], [0,74,0,79,0,83,0,79]
 ];
 
+// --- 特別BGM（ガチャのS賞「特別BGM」をそうびしたとき）：ヘ長調・マリンバ風の軽やかな曲／8小節ループ
+const SP_BASS = [41, 36, 38, 33, 34, 41, 43, 36];                                     // F C Dm Am B♭ F Gm C
+const SP_CHORD = [[65,69,72],[64,67,72],[62,65,69],[60,64,69],[62,65,70],[60,65,69],[62,67,70],[64,67,72]];
+const SP_MEL = [
+    [72,0,77,0,76,74,72,0], [67,0,72,0,74,72,67,0], [69,0,74,0,72,69,65,0], [64,0,69,0,67,64,60,0],
+    [70,0,74,0,77,74,70,0], [69,72,77,0,76,0,72,0], [70,0,74,72,70,0,67,0], [72,74,76,77,79,0,0,0]
+];
+
 const BGM_TRACKS = {
+    special: {
+        bpm: 112, level: 0.6, cutoff: 4200,
+        play(t, step, d, out) {
+            const i = step % 64, bar = i >> 3, pos = i & 7;
+            const m = SP_MEL[bar][pos];
+            if (m) {
+                bgmNote(out.soft, 'sine', m, t, d * 1.3, 0.09, 0.004);          // マリンバ風
+                bgmNote(out.soft, 'triangle', m + 12, t, d * 0.5, 0.025, 0.004); // きらっとした響き
+            }
+            if (pos === 2 || pos === 6) SP_CHORD[bar].forEach(n => bgmNote(out.soft, 'sine', n, t, d * 1.5, 0.03, 0.02));
+            if (pos === 0 || pos === 4) bgmNote(out.soft, 'triangle', SP_BASS[bar] + 12, t, d * 1.8, 0.15, 0.01);
+            if (pos === 0) bgmKick(out.gain, t, 0.12);
+            if (pos === 2 || pos === 6) bgmHat(out.gain, t, 0.03);
+        }
+    },
     top: {
         bpm: 132, level: 0.6, cutoff: 3600,
         play(t, step, d, out) {
@@ -1876,7 +1946,11 @@ function stopBGM() {
 // 画面に合わせてBGMを切り替える（screenId を省略すると今表示中の画面）
 function updateBGM(screenId) {
     if (!screenId) { const a = document.querySelector('.screen.active'); screenId = a ? a.id : ''; }
-    const mode = BGM_BY_SCREEN[screenId];
+    let mode = BGM_BY_SCREEN[screenId];
+    if (mode === 'top') {   // 「特別BGM」をそうびしていたら、トップ用の曲のかわりに特別な曲を流す
+        const snd = getEquippedLook('さうんど');
+        if (snd && snd.sound === 'specialBgm') mode = 'special';
+    }
     if (!mode || !isSoundOn) { stopBGM(); return; }
     setBGM(mode);
 }
@@ -2244,10 +2318,12 @@ function showGachaResult(res) {
     area.innerHTML = `
         <div class="gacha-result-card grade-${escapeHtml(res.grade)}">
             <div class="gacha-result-category">${escapeHtml(res.category)}</div>
+            ${res.isSnack ? '' : itemPreviewHtml(res.itemName, res.category)}
             <div class="gacha-result-name">${escapeHtml(res.itemName)}</div>
         </div>
         ${snackNote}
     `;
+    bindPreviewButtons(area);
     playResultSound(res.grade === 'S' ? 'S' : (res.grade === 'A' ? 'A' : (res.grade === 'B' ? 'B' : 'C')));
 
     const againBtn = document.getElementById('gacha-again-btn');
@@ -2332,6 +2408,149 @@ function submitPasswordChange() {
 }
 
 // ==========================================
+// ★ そうびアイテムの見た目・音
+// 景品マスタの景品名ごとに、そうびしたときの見た目や音を決める。
+// ここにない景品名（あとから景品マスタに足したもの）は、カテゴリごとの標準の絵で表示する。
+// ==========================================
+const CHARA_IMG = seed => 'https://api.dicebear.com/9.x/big-smile/svg?seed=' + seed + '&backgroundColor=transparent';
+const ITEM_LOOKS = {
+    // フレーム：マイページの名前カードのわく
+    'ノーマルフレーム': { frame: 'normal' },
+    'シルバーフレーム': { frame: 'silver' },
+    'ゴールドフレーム（赤オーラ）': { frame: 'gold' },
+    '虹色フレーム': { frame: 'rainbow' },
+    // おへや：マイページの「おへや」に置く家具
+    'ベーシックなイス': { room: '🪑' },
+    'ソファ': { room: '🛋️' },
+    '豪華ベッド': { room: '🛏️', sparkle: true },
+    '幻の家具「そらごころ伝説」': { room: '🏯', sparkle: true },
+    // すたんぷ：ログインカレンダーのスタンプ
+    'ノーマル柄スタンプ': { stamp: '⭐' },
+    'きらきら柄スタンプ': { stamp: '🌟' },
+    '激レア柄スタンプ': { stamp: '💎' },
+    '超激レア柄スタンプ': { stamp: '👑' },
+    // さうんど
+    '効果音バリエーション': { sound: 'variation', icon: '🔔' },   // 正解・不正解の音が変わる
+    '特別BGM': { sound: 'specialBgm', icon: '🎼' },                // トップ画面などのBGMが特別な曲になる
+    // えふぇくと：正解したときの演出
+    '正解エフェクトチケット': { effect: 'sparkle', icon: '✨' },
+    '虹色エフェクト': { effect: 'rainbow', icon: '🌈' },
+    // キャラ：トップ画面で歩いている3人
+    'ミキ': { chara: 'Miki' },
+    'ハル': { chara: 'Haru' },
+    'ユキ': { chara: 'Yuki' }
+};
+const CATEGORY_ICONS = { 'フレーム': '🖼️', 'おへや': '🪑', 'すたんぷ': '💮', 'さうんど': '🎵', 'えふぇくと': '✨', 'キャラ': '🙂' };
+
+function getEquippedName(category) {
+    const p = myPossessions.find(x => x.category === category && x.equipped);
+    return p ? p.itemName : null;
+}
+// そうび中のアイテムの設定（そうびしていなければ null、景品名が一覧にないときは {}）
+function getEquippedLook(category) {
+    const name = getEquippedName(category);
+    return name ? (ITEM_LOOKS[name] || {}) : null;
+}
+function currentStampMark() {
+    const look = getEquippedLook('すたんぷ');
+    return (look && look.stamp) || '💮';
+}
+
+// コレクション・ガチャ結果に出すアイテムの見本
+function itemPreviewHtml(name, category) {
+    const look = ITEM_LOOKS[name] || {};
+    let inner;
+    if (look.chara) inner = `<img class="ip-chara" src="${CHARA_IMG(look.chara)}" alt="">`;
+    else if (look.frame) inner = `<div class="ip-frame frame-${look.frame}">Aa</div>`;
+    else inner = `<span class="ip-emoji">${look.room || look.stamp || look.icon || CATEGORY_ICONS[category] || '🎁'}</span>`;
+    const tryBtn = (look.sound || look.effect)
+        ? `<button class="ip-try-btn" data-name="${escapeHtml(name)}">▶ ${look.sound ? 'きいてみる' : 'ためす'}</button>` : '';
+    return `<div class="item-preview">${inner}</div>${tryBtn}`;
+}
+// 見本の「▶ きいてみる／ためす」ボタンを使えるようにする（カードのクリック＝そうび とは分ける）
+function bindPreviewButtons(root) {
+    root.querySelectorAll('.ip-try-btn').forEach(b => {
+        b.onclick = (e) => { e.stopPropagation(); previewItem(b.dataset.name); };
+    });
+}
+function previewItem(name) {
+    const look = ITEM_LOOKS[name] || {};
+    initAudio();
+    if (look.effect) {
+        showAnswerEffect(true, look);
+        if (isSoundOn) playSound(true);
+    } else if (look.sound === 'variation') {
+        if (!isSoundOn) return alert('音が「音なし」に なっているよ');
+        playSound(true, look);
+        setTimeout(() => playSound(false, look), 700);
+    } else if (look.sound === 'specialBgm') {
+        if (!isSoundOn) return alert('音が「音なし」に なっているよ');
+        stopBGM(); setBGM('special');
+        setTimeout(() => { if (BGM.mode === 'special') updateBGM(); }, 8000);   // 8秒だけ流して、画面のBGMにもどす
+    }
+}
+
+// そうび中のアイテムを画面に反映する（ログイン後・マイページ表示時・そうびを変えたとき）
+function applyEquippedLooks() {
+    const header = document.getElementById('mypage-header');
+    header.classList.remove('frame-normal', 'frame-silver', 'frame-gold', 'frame-rainbow');
+    const fr = getEquippedLook('フレーム');
+    if (fr && fr.frame) header.classList.add('frame-' + fr.frame);
+    renderRoom();
+    if (document.getElementById('screen-mypage').classList.contains('active')) updateMyPageCalendar();
+    updateBGM();
+}
+
+// マイページの「おへや」：そうびした家具とキャラを置く
+function renderRoom() {
+    const room = document.getElementById('mypage-room');
+    const furniture = getEquippedName('おへや'), chara = getEquippedName('キャラ');
+    const fl = furniture ? (ITEM_LOOKS[furniture] || {}) : null;
+    const cl = chara ? (ITEM_LOOKS[chara] || {}) : null;
+    let html = '<span class="room-title">🏠 おへや</span>';
+    if (!furniture && !chara) html += '<div class="room-empty">ガチャで「おへや」や「キャラ」を あつめて、コレクションで そうびすると ここに かざれるよ</div>';
+    if (furniture) html += `<span class="room-furniture${fl.sparkle ? ' sparkle' : ''}">${fl.room || '🪑'}</span>`;
+    if (chara) html += cl.chara ? `<img class="room-chara" src="${CHARA_IMG(cl.chara)}" alt="">` : '<span class="room-furniture">🙂</span>';
+    room.innerHTML = html;
+}
+
+// 正解したときの追加の演出（えふぇくと）
+function playCorrectEffect(look) {
+    if (!look || !look.effect) return;
+    const wrap = document.createElement('div');
+    wrap.className = 'sbonus-wrap';
+    document.getElementById('app-container').appendChild(wrap);
+    if (look.effect === 'rainbow') {
+        spawnFxParticles(wrap, { emojis: ['🌈', '✨', '💫', '⭐'], count: 30, spread: 260, duration: 1.2 });
+        spawnFxConfetti(wrap, 40);
+    } else {
+        spawnFxParticles(wrap, { emojis: ['✨', '⭐', '🌟'], count: 22, spread: 220, duration: 1.0 });
+    }
+    setTimeout(() => wrap.remove(), 3200);
+}
+
+// 効果音バリエーション（正解：きらきらの和音／不正解：ぼよ〜ん）
+function playVariationSound(isCorrect) {
+    const t = audioCtx.currentTime;
+    const tone = (freq, start, dur, type, vol, freqEnd) => {
+        const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+        o.type = type; o.frequency.setValueAtTime(freq, t + start);
+        if (freqEnd) o.frequency.exponentialRampToValueAtTime(freqEnd, t + start + dur);
+        g.gain.setValueAtTime(0.0001, t + start);
+        g.gain.linearRampToValueAtTime(vol, t + start + 0.015);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + start + dur);
+        o.connect(g); g.connect(audioCtx.destination);
+        o.start(t + start); o.stop(t + start + dur + 0.05);
+    };
+    if (isCorrect) {
+        [1046.5, 1318.5, 1568, 2093].forEach((f, i) => tone(f, i * 0.07, 0.4, 'triangle', 0.3));
+    } else {
+        tone(392, 0, 0.4, 'sine', 0.45, 180);
+        tone(370, 0.14, 0.35, 'sine', 0.25, 170);
+    }
+}
+
+// ==========================================
 // ★ コレクション
 // ==========================================
 function openCollection() {
@@ -2376,8 +2595,9 @@ function renderCollectionGrid() {
         const el = document.createElement('div');
         el.className = 'collection-item' + (item.equipped ? ' equipped' : '');
         const countBadge = item.count > 1 ? ` <span class="ci-count">×${item.count}</span>` : '';
-        el.innerHTML = `<span class="ci-mark">${item.equipped ? '✅' : '⬜'}</span>${escapeHtml(item.itemName)}${countBadge}`;
+        el.innerHTML = `<span class="ci-mark">${item.equipped ? '✅' : '⬜'}</span>${itemPreviewHtml(item.itemName, item.category)}${escapeHtml(item.itemName)}${countBadge}`;
         el.onclick = () => equipCollectionItem(item);
+        bindPreviewButtons(el);
         grid.appendChild(el);
     });
 }
@@ -2389,6 +2609,7 @@ function equipCollectionItem(item) {
             if (res.status === 'success') {
                 myPossessions.forEach(p => { if (p.category === item.category) p.equipped = (p.itemName === item.itemName); });
                 renderCollectionGrid();
+                applyEquippedLooks();   // フレーム・おへや・音などをすぐ切りかえる
             } else {
                 alert(res.message || 'そうびできませんでした');
             }

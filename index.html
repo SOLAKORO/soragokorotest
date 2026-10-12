@@ -455,6 +455,61 @@
     /* --- そうびアイテム：虹色エフェクトの ◯ --- */
     #effect-overlay.rainbow-maru { background: linear-gradient(90deg, #ff5252, #ffeb3b, #4caf50, #2196f3, #9c27b0); background-size: 15rem 100%; background-position: center; background-repeat: no-repeat; -webkit-background-clip: text; background-clip: text; color: transparent !important; }
 
+/* ★ ハロウィンイベント */
+.evt-overlay { position: fixed; inset: 0; background: rgba(20,8,35,0.72); z-index: 9000; display: flex; align-items: center; justify-content: center; padding: 12px; animation: evtFade .25s ease-out; }
+@keyframes evtFade { from { opacity: 0; } to { opacity: 1; } }
+.evt-card { width: 100%; max-width: 440px; max-height: 94vh; overflow-y: auto; background: linear-gradient(170deg, #3b1d5c, #1d0f30); color: #fff; border: 4px solid #ff7a1a; border-radius: 22px; padding: 16px 16px 12px; box-shadow: 0 0 40px #ff7a1a66; animation: evtPop .45s cubic-bezier(0.175, 0.885, 0.32, 1.275); font-weight: bold; }
+@keyframes evtPop { from { transform: scale(0.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.evt-head { display: flex; align-items: center; gap: 10px; }
+.evt-pump { font-size: 3rem; animation: evtSwing 1.2s ease-in-out infinite alternate; transform-origin: 50% 90%; }
+@keyframes evtSwing { from { transform: rotate(-12deg); } to { transform: rotate(12deg); } }
+.evt-title { font-size: 1.35rem; line-height: 1.2; }
+.evt-sub { font-size: .85rem; color: #ffd27a; margin-top: 2px; }
+.evt-demo { display: inline-block; background: #ff4081; color: #fff; font-size: .7rem; padding: 2px 8px; border-radius: 999px; margin-left: 4px; vertical-align: middle; }
+.evt-box { background: #ffffff14; border: 2px solid #ffffff22; border-radius: 14px; padding: 10px 12px; margin-top: 10px; }
+.evt-box h4 { margin: 0 0 6px; font-size: 1rem; color: #ffd27a; display: flex; justify-content: space-between; align-items: baseline; }
+.evt-box h4 small { color: #f3e9ff; font-size: .78rem; }
+.evt-flame-row { display: flex; align-items: center; gap: 12px; }
+.evt-flame { display: inline-block; animation: evtFlicker .5s ease-in-out infinite alternate; }
+.evt-flame.big { filter: drop-shadow(0 0 10px #ff9800); }
+.evt-flame.blue { filter: hue-rotate(190deg) drop-shadow(0 0 12px #40c4ff); }
+@keyframes evtFlicker { from { transform: scale(1) rotate(-3deg); } to { transform: scale(1.08) rotate(3deg); } }
+.evt-days { font-size: 1.6rem; color: #fff; }
+.evt-days small { font-size: .85rem; color: #f3e9ff; }
+.evt-ticket { margin-left: auto; text-align: center; font-size: .75rem; color: #f3e9ff; }
+.evt-ticket b { display: block; font-size: 1.4rem; }
+.evt-bar { position: relative; height: 22px; background: #00000055; border-radius: 999px; overflow: hidden; border: 2px solid #ffffff33; }
+.evt-bar i { position: absolute; left: 0; top: 0; bottom: 0; background: linear-gradient(90deg, #ff7a1a, #ffd27a); border-radius: 999px; transition: width 1.2s ease-out; }
+.evt-bar span { position: absolute; inset: 0; text-align: center; font-size: .8rem; line-height: 18px; color: #fff; text-shadow: 0 1px 2px #000; }
+.evt-bar .mk { position: absolute; top: 0; bottom: 0; width: 2px; background: #ffffff66; }
+.evt-note { font-size: .78rem; color: #f3e9ff; margin-top: 6px; }
+.evt-teams { display: flex; gap: 8px; }
+.evt-team { flex: 1; text-align: center; border-radius: 12px; padding: 8px 4px; background: #00000033; border: 2px solid transparent; }
+.evt-team.mine { border-color: #ffd27a; background: #ff7a1a33; }
+.evt-team .em { font-size: 1.8rem; display: block; }
+.evt-team .sc { font-size: 1.2rem; }
+.evt-team button { margin-top: 6px; background: #ff7a1a; color: #fff; border: none; border-radius: 999px; padding: 6px 14px; font-weight: bold; font-size: .9rem; box-shadow: 0 3px 0 #b34f00; cursor: pointer; }
+.evt-team.obake button { background: #7e57c2; box-shadow: 0 3px 0 #4527a0; }
+.evt-mission { display: flex; align-items: center; gap: 8px; padding: 4px 0; font-size: .95rem; }
+.evt-mission .ck { font-size: 1.2rem; }
+.evt-mission.done span.tx { color: #ffd27a; text-decoration: line-through; text-decoration-color: #ffd27a99; }
+.evt-mission .pr { margin-left: auto; font-size: .8rem; color: #f3e9ff; }
+.evt-pass { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+.evt-pass div { text-align: center; background: #00000033; border-radius: 10px; padding: 4px 0 2px; font-size: 1.3rem; position: relative; border: 2px solid transparent; }
+.evt-pass div small { display: block; font-size: .62rem; color: #f3e9ff; }
+.evt-pass div.got { background: #ff7a1a55; border-color: #ffd27a; }
+.evt-pass div.lock { filter: grayscale(.6); opacity: .7; }
+.evt-pass div.next { border-color: #fff; animation: evtNext 1s ease-in-out infinite alternate; }
+@keyframes evtNext { from { box-shadow: 0 0 0 #fff0; } to { box-shadow: 0 0 10px #fff; } }
+.evt-new { background: #ffd27a; color: #3b1d5c; border-radius: 12px; padding: 8px 12px; margin-top: 10px; text-align: center; animation: evtPop .5s; }
+.evt-start { display: block; width: 100%; margin-top: 12px; padding: 12px; font-size: 1.3rem; font-weight: 900; color: #fff; background: #ff7a1a; border: none; border-radius: 14px; box-shadow: 0 5px 0 #b34f00; cursor: pointer; }
+.evt-craft { display: block; width: 100%; margin-top: 10px; padding: 10px; font-size: 1.05rem; font-weight: 900; color: #fff; background: #43a047; border: none; border-radius: 14px; box-shadow: 0 4px 0 #2e7d32; cursor: pointer; }
+.evt-hide { display: flex; align-items: center; gap: 6px; justify-content: center; margin-top: 10px; font-size: .85rem; color: #f3e9ff; }
+.evt-open-btn { position: absolute; left: 10px; bottom: 12px; z-index: 50; font-size: 1rem; font-weight: bold; color: #fff; background: linear-gradient(135deg, #ff7a1a, #7e57c2); border: none; border-radius: 999px; padding: 8px 14px; box-shadow: 0 4px 0 #4527a0; cursor: pointer; animation: evtSwing 1.4s ease-in-out infinite alternate; transform-origin: 50% 100%; }
+.evt-toast { position: fixed; left: 50%; top: 18%; transform: translateX(-50%); z-index: 9100; background: linear-gradient(135deg, #ff7a1a, #7e57c2); color: #fff; font-weight: 900; padding: 14px 20px; border-radius: 16px; box-shadow: 0 6px 20px #0006; text-align: center; animation: evtPop .45s; max-width: 90vw; }
+.mypage-header.frame-halloween { border: 4px solid #ff7a1a; background: linear-gradient(160deg, #fff3e0, #ede7f6); animation: frameHalloween 1.2s ease-in-out infinite alternate; }
+.ip-frame.frame-halloween { border: 3px solid #ff7a1a; background: #ede7f6; animation: frameHalloween 1.2s ease-in-out infinite alternate; }
+@keyframes frameHalloween { from { box-shadow: 0 0 6px #ff7a1a; } to { box-shadow: 0 0 16px #7e57c2; } }
 </style>
 </head>
 <body>
@@ -858,6 +913,7 @@ function loginApp() {
             currentUserId = String(data.memberNo || id);   // ★ これ以降の通信・端末のきろくは番号で行う
             currentPoints = data.points || 0;
             isFirstLoginTodayFlag = data.isFirstLoginToday;
+            eventEnabled = !!data.event;   // ★ ハロウィンイベント
             if (!data.idShared) migrateLegacyHistory(id);   // 同じIDの人がいなければ、古いきろくを番号のほうへ移す
             cacheLoginDates(data.loginDates); // ★ ログイン履歴はスプレッドシートを正として端末に反映
             // そうび中のアイテム（音・スタンプ・エフェクトなど）をテストでも使えるよう、ログイン直後に読み込んでおく
@@ -874,6 +930,7 @@ function loginApp() {
                 safeStore.remove('soragokoro_saved_id_all');
             }
             showScreen('screen-grade-select');
+            if (eventEnabled) openEventPopup(false);
         } else {
             errorEl.textContent = data.message || "ログインに失敗しました。";
             errorEl.classList.remove('hidden');
@@ -908,6 +965,7 @@ function migrateLegacyHistory(loginId) {
 
 function logoutApp() {
     currentUser = ""; currentUserId = ""; currentLoginId = ""; currentPoints = 0; selectedFilterDate = null;
+    eventEnabled = false; eventData = null; updateEventButtons();
     myPossessions = []; applyEquippedLooks();   // 前の人のそうび（音・フレームなど）を残さない
     document.getElementById('login-password').value = "";
     if (!document.getElementById('save-id-check').checked) document.getElementById('login-id').value = "";
@@ -1676,6 +1734,8 @@ function sendDataToGAS(rankStr, scoreNumber, totalQuestions, timeStr, correctAns
         } else if (res && res.sBonusAlready) {
             showSBonusInfo();
         }
+        if (eventEnabled) refreshEventAfterTest();   // ★ ミッション・パスの進みを反映
+
     })
     .catch(err => console.error("送信エラー", err));
 }
@@ -2082,8 +2142,8 @@ const GT_HERO = { C: '🐰', B: '🐱', A: '🦁', S: '🦄' };
 
 function pickOne(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 
-// ★ トップページで歩いているキャラ（Miki / Haru / Yuki）を演出にも使う。読み込めないときは絵文字にする
-const GT_CHAR_IMGS = ['Miki', 'Haru', 'Yuki'].map(n => 'https://api.dicebear.com/9.x/big-smile/svg?seed=' + n + '&backgroundColor=transparent');
+// ★ トップページで歩いているキャラ（Miki・Haru・Yuki）を演出にも使う。読み込めないときは絵文字にする
+const GT_CHAR_IMGS = ['Miki', 'Haru', 'Yuki'].map(n => 'https:\/\/api.dicebear.com/9.x/big-smile/svg?seed=' + n + '&backgroundColor=transparent');
 function fillCharNode(el, emoji, sizeRem, imgRate) {
     if (Math.random() < (imgRate === undefined ? 0.65 : imgRate)) {
         const img = document.createElement('img');
@@ -2446,7 +2506,7 @@ function submitPasswordChange() {
 // 景品マスタの景品名ごとに、そうびしたときの見た目や音を決める。
 // ここにない景品名（あとから景品マスタに足したもの）は、カテゴリごとの標準の絵で表示する。
 // ==========================================
-const CHARA_IMG = seed => 'https://api.dicebear.com/9.x/big-smile/svg?seed=' + seed + '&backgroundColor=transparent';
+const CHARA_IMG = seed => 'https:\/\/api.dicebear.com/9.x/big-smile/svg?seed=' + seed + '&backgroundColor=transparent';
 const ITEM_LOOKS = {
     // フレーム：マイページの名前カードのわく
     'ノーマルフレーム': { frame: 'normal' },
@@ -2472,7 +2532,19 @@ const ITEM_LOOKS = {
     // キャラ：トップ画面で歩いている3人
     'ミキ': { chara: 'Miki' },
     'ハル': { chara: 'Haru' },
-    'ユキ': { chara: 'Yuki' }
+    'ユキ': { chara: 'Yuki' },
+    // ★ ハロウィンイベント限定（パス・限定ガチャ）
+    'かぼちゃスタンプ': { stamp: '🎃' },
+    'おばけスタンプ': { stamp: '👻' },
+    'こうもりスタンプ': { stamp: '🦇' },
+    'キャンディスタンプ': { stamp: '🍬' },
+    'おばけのぬいぐるみ': { room: '👻' },
+    'まほうのほうき': { room: '🧹' },
+    'クモの巣かざり': { room: '🕸️' },
+    'まじょのぼうし': { room: '🧙' },
+    '黄金のかぼちゃ': { room: '🎃', sparkle: true },
+    'ハロウィンフレーム': { frame: 'halloween' },
+    'パンプキンエフェクト': { effect: 'pumpkin', icon: '🎃' }
 };
 const CATEGORY_ICONS = { 'フレーム': '🖼️', 'おへや': '🪑', 'すたんぷ': '💮', 'さうんど': '🎵', 'えふぇくと': '✨', 'キャラ': '🙂' };
 
@@ -2527,7 +2599,7 @@ function previewItem(name) {
 // そうび中のアイテムを画面に反映する（ログイン後・マイページ表示時・そうびを変えたとき）
 function applyEquippedLooks() {
     const header = document.getElementById('mypage-header');
-    header.classList.remove('frame-normal', 'frame-silver', 'frame-gold', 'frame-rainbow');
+    header.classList.remove('frame-normal', 'frame-silver', 'frame-gold', 'frame-rainbow', 'frame-halloween');
     const fr = getEquippedLook('フレーム');
     if (fr && fr.frame) header.classList.add('frame-' + fr.frame);
     renderRoom();
@@ -2585,6 +2657,8 @@ function playCorrectEffect(look) {
     if (look.effect === 'rainbow') {
         spawnFxParticles(wrap, { emojis: ['🌈', '✨', '💫', '⭐'], count: 30, spread: 260, duration: 1.2 });
         spawnFxConfetti(wrap, 40);
+    } else if (look.effect === 'pumpkin') {
+        spawnFxParticles(wrap, { emojis: ['🎃', '👻', '🦇', '🍬'], count: 26, spread: 240, duration: 1.2 });
     } else {
         spawnFxParticles(wrap, { emojis: ['✨', '⭐', '🌟'], count: 22, spread: 220, duration: 1.0 });
     }
@@ -2737,6 +2811,199 @@ document.addEventListener('click', (e) => {
     const b = e.target && e.target.closest ? e.target.closest('button') : null;
     if (b && !b.disabled) playClickSound();
 }, true);
+</script>
+<script>
+// ==========================================
+// ★ 10月限定 ハロウィンイベント（サーバー側は イベント.js）
+//   ログインするとお知らせが開く（「今日はもう表示しない」で その日は出さない。
+//   ただし みんなのゲージが 50%・80%・100% をこえた日は 1回だけ出す）
+// ==========================================
+let eventEnabled = false;
+let eventData = null;
+const EVT_TEAM_ICON = { 'かぼちゃ': '🎃', 'おばけ': '👻' };
+const evtToday = () => { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
+const evtGaugePct = d => Math.min(100, Math.floor(d.gauge.total / d.gauge.goal * 100));
+const evtMilestone = pct => pct >= 100 ? 100 : pct >= 80 ? 80 : pct >= 50 ? 50 : 0;
+
+function evtRewardIcon(r) {
+    if (r.pt) return '🪙';
+    const look = ITEM_LOOKS[r.item] || {};
+    if (look.frame) return '🖼️';
+    return look.stamp || look.room || look.icon || '🎁';
+}
+function evtRewardLabel(r) { return r.pt ? `${r.pt}pt` : r.item; }
+
+// ログイン直後（force=false）と、イベントボタン（force=true）から開く
+function openEventPopup(force) {
+    callGAS({ action: 'getEventData', id: currentUserId })
+        .then(d => {
+            if (!d || d.status !== 'success' || !d.active) { eventEnabled = false; updateEventButtons(); return; }
+            eventData = d;
+            updateEventButtons();
+            if (d.points !== null && d.points !== undefined) setPointsFromEvent(d.points);
+            const ms = evtMilestone(evtGaugePct(d));
+            const msKey = localKey('evt_ms'), hideKey = localKey('evt_hide');
+            const newMilestone = ms > (parseInt(safeStore.get(msKey)) || 0);
+            const hasNews = newMilestone || (d.pass.newRewards || []).length > 0 || d.missionRewardNow;
+            if (!force && !hasNews && safeStore.get(hideKey) === evtToday()) return;
+            if (newMilestone) safeStore.set(msKey, String(ms));
+            renderEventPopup(d, newMilestone ? ms : 0);
+        })
+        .catch(err => console.error('イベント取得エラー', err));
+}
+
+function setPointsFromEvent(p) {
+    currentPoints = p;
+    const el = document.getElementById('mypage-points-display');
+    if (el) el.textContent = `🪙 ${currentPoints} Pt`;
+}
+
+function renderEventPopup(d, milestone) {
+    closeEventPopup();
+    const pct = evtGaugePct(d);
+    const st = d.streak;
+    const flameSize = st.days >= 14 ? 3.4 : st.days >= 7 ? 3 : st.days >= 3 ? 2.5 : 2;
+    const flameCls = 'evt-flame' + (st.days >= 14 ? ' blue' : st.days >= 7 ? ' big' : '');
+    const nextLv = d.pass.lv < d.pass.rewards.length ? d.pass.rewards[d.pass.lv] : null;
+    const toNext = nextLv ? nextLv.lv * d.pass.step - d.pass.correct : 0;
+
+    let news = '';
+    if (milestone) news += `<div class="evt-new">⭐ みんなのゲージが ${milestone}% をこえた！${milestone >= 100 ? '<br>🎉 ひみつの ごほうびが かいほうされたよ！せんせいに きいてみよう' : ''}</div>`;
+    (d.pass.newRewards || []).forEach(r => { news += `<div class="evt-new">🎃 ハロウィンパス Lv${r.lv} たっせい！<br>${evtRewardIcon(r)} ${escapeHtml(evtRewardLabel(r))} を ゲット！</div>`; });
+    if (d.missionRewardNow) news += `<div class="evt-new">✅ きょうのミッション ぜんぶ クリア！ +1pt</div>`;
+
+    let teamHtml;
+    if (d.team) {
+        teamHtml = '<div class="evt-teams">' + Object.keys(d.teams).map(t =>
+            `<div class="evt-team ${t === 'おばけ' ? 'obake' : ''} ${t === d.team ? 'mine' : ''}"><span class="em">${EVT_TEAM_ICON[t] || '❓'}</span>${escapeHtml(t)}チーム<br><span class="sc">${d.teams[t].score}問</span>${t === d.team ? '<br><small>あなたの チーム</small>' : ''}</div>`).join('') + '</div>';
+    } else {
+        teamHtml = '<div class="evt-note" style="margin:0 0 6px;">どっちの チームに はいる？（あとから かえられないよ）</div><div class="evt-teams">' + Object.keys(d.teams).map(t =>
+            `<div class="evt-team ${t === 'おばけ' ? 'obake' : ''}"><span class="em">${EVT_TEAM_ICON[t] || '❓'}</span>${escapeHtml(t)}チーム<br><small>${d.teams[t].members}人</small><br><button data-team="${escapeHtml(t)}">これにする！</button></div>`).join('') + '</div>';
+    }
+
+    const missions = d.missions.map(m =>
+        `<div class="evt-mission ${m.done ? 'done' : ''}"><span class="ck">${m.done ? '✅' : '⬜'}</span><span class="tx">${escapeHtml(m.text)}</span>${m.goal ? `<span class="pr">${m.now} / ${m.goal}</span>` : ''}</div>`).join('');
+
+    const pass = d.pass.rewards.map(r => {
+        const cls = r.lv <= d.pass.lv ? 'got' : (nextLv && r.lv === nextLv.lv ? 'next' : 'lock');
+        return `<div class="${cls}" title="${escapeHtml(evtRewardLabel(r))}">${evtRewardIcon(r)}<small>Lv${r.lv}</small></div>`;
+    }).join('');
+
+    const ov = document.createElement('div');
+    ov.className = 'evt-overlay';
+    ov.id = 'evt-overlay';
+    ov.innerHTML = `
+      <div class="evt-card">
+        <div class="evt-head">
+          <span class="evt-pump">🎃</span>
+          <div>
+            <div class="evt-title">ハロウィンイベント${d.isDemo ? '<span class="evt-demo">デモ</span>' : ''}</div>
+            <div class="evt-sub">${d.daysLeft > 0 ? `10/31 まで あと ${d.daysLeft}日！` : 'きょうが さいごの日！'}</div>
+          </div>
+        </div>
+        ${news}
+        <div class="evt-box">
+          <h4>🔥 ログインの炎 <small>まいにち ログインで そだつ</small></h4>
+          <div class="evt-flame-row">
+            <span class="${flameCls}" style="font-size:${flameSize}rem">🔥</span>
+            <div class="evt-days">${st.days}<small> 日 れんぞく</small></div>
+            <div class="evt-ticket">おやすみチケット<b>${st.restTicket ? '🎫' : '－'}</b>${st.restTicket ? 'のこり 1まい' : 'こんしゅうは つかったよ'}</div>
+          </div>
+          <div class="evt-note">1週間に 1日だけ、お休みしても 炎は きえないよ</div>
+        </div>
+        <div class="evt-box">
+          <h4>⭐ みんなのゲージ <small>みんなの 正解数</small></h4>
+          <div class="evt-bar"><i style="width:0%"></i><b class="mk" style="left:50%"></b><b class="mk" style="left:80%"></b><span>${d.gauge.total} / ${d.gauge.goal}問（${pct}%）</span></div>
+          <div class="evt-note">🧱 クラフトの ミッションクリアは ${d.craft ? d.craft.missionValue : 5}問ぶん、まいにちチャレンジは ${d.craft ? d.craft.dailyValue : 3}問ぶん たまるよ<br>満タンに なると…なにかが おこる！？</div>
+        </div>
+        <div class="evt-box">
+          <h4>🏁 チームたいこう</h4>
+          ${teamHtml}
+        </div>
+        <div class="evt-box">
+          <h4>📋 きょうのミッション <small>ぜんぶで +1pt</small></h4>
+          ${missions}
+        </div>
+        <div class="evt-box">
+          <h4>🎟️ ハロウィンパス Lv${d.pass.lv} <small>${nextLv ? `あと ${toNext}問ぶんで Lv${nextLv.lv}（${escapeHtml(evtRewardLabel(nextLv))}）` : 'コンプリート！'}</small></h4>
+          <div class="evt-pass">${pass}</div>
+        </div>
+        <button class="evt-start" id="evt-start-btn">はじめる！</button>
+        <button class="evt-craft" id="evt-craft-btn">🧱 そらごころクラフトで あそぶ</button>
+        <label class="evt-hide"><input type="checkbox" id="evt-hide-check" ${safeStore.get(localKey('evt_hide')) === evtToday() ? 'checked' : ''}> 今日は もう ひょうじしない</label>
+      </div>`;
+    document.body.appendChild(ov);
+    setTimeout(() => { const bar = ov.querySelector('.evt-bar i'); if (bar) bar.style.width = pct + '%'; }, 80);
+    ov.querySelectorAll('button[data-team]').forEach(b => { b.onclick = () => chooseEventTeam(b.dataset.team, b); });
+    // ★ GASの公開時のコメント削除でURLが壊れないよう、スラッシュは \/ と書く
+    document.getElementById('evt-craft-btn').onclick = () => { window.open('https:\/\/solakoro.github.io\/soragokoro-craft\/', '_blank'); };
+    document.getElementById('evt-start-btn').onclick = () => {
+        if (document.getElementById('evt-hide-check').checked) safeStore.set(localKey('evt_hide'), evtToday());
+        else safeStore.remove(localKey('evt_hide'));
+        closeEventPopup();
+    };
+    if (d.pass.newRewards && d.pass.newRewards.length) {   // 新しくもらったアイテムを マイページ・コレクションに反映
+        callGAS({ action: 'getMyPageData', id: currentUserId }).then(x => { if (x.status === 'success') applyMyPageData(x); }).catch(() => {});
+    }
+}
+
+function closeEventPopup() {
+    const ov = document.getElementById('evt-overlay');
+    if (ov) ov.remove();
+}
+
+function chooseEventTeam(team, btn) {
+    if (!confirm(`${team}チームに はいる？\n（あとから かえられないよ）`)) return;
+    btn.disabled = true;
+    callGAS({ action: 'chooseEventTeam', id: currentUserId, team: team })
+        .then(r => {
+            if (r.status !== 'success') { alert(r.message || 'エラー'); btn.disabled = false; return; }
+            openEventPopup(true);
+        })
+        .catch(() => { alert('通信エラー'); btn.disabled = false; });
+}
+
+// テストのあと：ミッションやパスが進んだら お知らせ
+function refreshEventAfterTest() {
+    callGAS({ action: 'getEventData', id: currentUserId })
+        .then(d => {
+            if (!d || d.status !== 'success' || !d.active) return;
+            const before = eventData;
+            eventData = d;
+            if (d.points !== null && d.points !== undefined) setPointsFromEvent(d.points);
+            const msgs = [];
+            (d.pass.newRewards || []).forEach(r => msgs.push(`🎃 ハロウィンパス Lv${r.lv} たっせい！<br>${evtRewardIcon(r)} ${escapeHtml(evtRewardLabel(r))} ゲット！`));
+            if (d.missionRewardNow) msgs.push('✅ きょうのミッション ぜんぶ クリア！ +1pt');
+            else if (before) d.missions.forEach((m, i) => { if (m.done && before.missions[i] && !before.missions[i].done) msgs.push(`✅ ミッション「${escapeHtml(m.text)}」クリア！`); });
+            if (msgs.length) showEventToast(msgs.join('<br>'));
+            if ((d.pass.newRewards || []).length) callGAS({ action: 'getMyPageData', id: currentUserId }).then(x => { if (x.status === 'success') applyMyPageData(x); }).catch(() => {});
+        })
+        .catch(err => console.error('イベント更新エラー', err));
+}
+
+function showEventToast(html) {
+    const t = document.createElement('div');
+    t.className = 'evt-toast';
+    t.innerHTML = html;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 3500);
+}
+
+// 「🎃 イベント」ボタン（学年えらび・科目えらび・マイページ）
+function updateEventButtons() {
+    ['screen-grade-select', 'screen-top', 'screen-mypage'].forEach(id => {
+        const sc = document.getElementById(id);
+        if (!sc) return;
+        let b = sc.querySelector('.evt-open-btn');
+        if (eventEnabled && !b) {
+            b = document.createElement('button');
+            b.className = 'evt-open-btn';
+            b.textContent = '🎃 イベント';
+            b.onclick = () => openEventPopup(true);
+            sc.appendChild(b);
+        } else if (!eventEnabled && b) b.remove();
+    });
+}
 </script>
 </body>
 </html>
